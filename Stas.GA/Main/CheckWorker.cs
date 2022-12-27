@@ -7,51 +7,32 @@ using System.Text.Json.Serialization;
 
 
 public partial class Settings : iSett {
-    /// <summary>
-    /// Manually match the hero to the preset ones
-    /// </summary>
-    public Dictionary<string, string> my_worker_names { get; set; } = new();
+   
     public Settings() {
     }
 }
 public partial class ui {
+    /// <summary>
+    /// need after gamestate was changed to select hero screen 
+    /// </summary>
+    public static void ResetWorker() {
+        b_worker_err = false;
+        worker = null;
+        curr_player = null;
+    }
     static Player curr_player;
     static void CheckWorker() {
-        if (me.Address == IntPtr.Zero ) {
-            //its possible if relogin fast - debug here here
+        if (me.Address == default || b_worker_err! || !me.GetComp<Player>(out var _cp) || string.IsNullOrEmpty(_cp.Name)) {
+            //Address== defaul possible if relogin fast - debug here mb
+            ui.AddToLog(tName + ".CheckWorker err get curr player", MessType.Error);
             return;
         }
-        if (b_worker_err) {
-            return;
-        }
-        else {
-            me.GetComp<Player>(out var _cp);//current me.player 
-
-            if (worker == null || curr_player == null ||
-                (_cp != null && _cp.Name != curr_player.Name)) {
-                if (_cp != null && !string.IsNullOrEmpty(_cp.Name)) {
-                    if (!b_worker_from_settings_err) {
-                        if (ui.sett.my_worker_names.ContainsKey(_cp.Name)) {
-                            ui.AddToLog("CheckWorker A suitable build has been found for:[" + _cp.Name + "] ");
-                            var class_name = ui.sett.my_worker_names[_cp.Name];
-                            worker = GetWorkerByName(class_name);
-                            if (b_worker_err) {
-                                ui.AddToLog("CheckWorker for:[" + _cp.Name + "] a class that does not exist\n in the code is selected ["+ class_name + "]");
-                                b_worker_from_settings_err = true;
-                                b_worker_err = false; //for check auto next frame
-                            }
-                        }
-                    }
-                    else {
-                        worker = GetWorkerByName(_cp.Name);
-                    }
-                    if(!b_worker_err)
-                        curr_player = _cp;
-                }
-            }
+        if (worker == null || curr_player == null || _cp.Name != curr_player.Name) {
+            worker = GetWorkerByName(_cp.Name);
+            if (!b_worker_err)
+                curr_player = _cp;
         }
     }
-    static bool b_worker_from_settings_err = false;
     static bool b_worker_err = false;
     static aWorker GetWorkerByName(string _name) {
         if (!b_worker_err) {
@@ -72,8 +53,10 @@ public partial class ui {
                 var pattern = "Could not load type '(.*?)' from assembly";
                 var re = new Regex(pattern);
                 var err = "GetWorkerByName err...";
-                Debug.Assert(re.IsMatch(ex.Message));
-                err += (string)re.Matches(ex.Message)[0].Groups[1].Value;
+                if (re.IsMatch(ex.Message))
+                    err += (string)re.Matches(ex.Message)[0].Groups[1].Value;
+                else
+                    err += "=>" + ex.Message;
                 ui.AddToLog(err, MessType.Critical);
                 return null;
             }

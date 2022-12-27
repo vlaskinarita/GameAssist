@@ -8,3 +8,8 @@ https://stackoverflow.com/questions/28301058/how-to-change-the-output-name-of-an
 		<Move SourceFiles="$(OUTDIR)\Stas.GA.exe" DestinationFiles="$(OUTDIR)\Notepad.exe" />
 		<Message Text="Renamed executable file." Importance="high" />
 	</Target>
+
+	for AOT
+	<IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+		<IlcDisableReflection>false</IlcDisableReflection>
+		<PublishAot>true</PublishAot>

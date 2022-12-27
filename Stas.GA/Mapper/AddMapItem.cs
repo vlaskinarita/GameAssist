@@ -8,7 +8,8 @@ namespace Stas.GA;
 public partial class AreaInstance {
     ConcurrentBag<Cell> frame_trigger = new();
     ConcurrentBag<MapItem> frame_items = new();
-    public ConcurrentBag<iTask> frame_i_tasks = new ConcurrentBag<iTask>();
+    public ConcurrentBag<iTask> iTasks = new ();
+    ConcurrentBag<iTask> frame_i_tasks = new ();
     HashSet<string> quest_ent = new HashSet<string>();
 
     MapItem AddMapItem(Entity e) {

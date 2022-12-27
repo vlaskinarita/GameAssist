@@ -97,9 +97,8 @@ public partial class ui {
     }
     public static Life life {
         get {
-            if (me == null || !me.IsValid)
-                return null;
             me.GetComp<Life>(out var _life);
+            Debug.Assert(_life != null);
             return _life;
         }
     }

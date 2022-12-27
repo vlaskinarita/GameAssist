@@ -45,8 +45,14 @@ namespace Stas.GA {
                 return alt;
             }
         }
-        public static bool b_grace => me.IsValid && me.buffs != null
-          && me.buffs.StatusEffects.ContainsKey("grace_period");
+        public static bool b_grace {
+            get {
+                var buffs = me.buffs;
+                if (buffs == null)
+                    return false;
+                return buffs.StatusEffects.ContainsKey("grace_period");
+            }
+        }
 
         public static bool b_contrl => Keyboard.IsKeyDown(Keys.ControlKey);
         public static bool b_I_died => me == null ? false : me.IsDead;

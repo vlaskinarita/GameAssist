@@ -50,7 +50,7 @@ namespace Stas.GA {
             //   continue;
             iTask new_it = null;
             if (e.Path.Contains("Necromancer") && ui.nav.b_can_hit(e)) {
-                new_it = new MapTask(e.id, e.gpos,  "Necro");
+                new_it = new EnemyTask(e.id, e, default,  "Necro");
                 danger_enemy.Add(e);
                 curr_danger += e.danger_rt;
                 return;
@@ -69,10 +69,10 @@ namespace Stas.GA {
                         var tgp = aw.tgp;// pf.TargetMovePos.ToVector2();
                         if (trg != null && trg.IsValid ) {
                             foreach (var p in frame_party) {
-                                var gdist = tgp.GetDistance(p.gpos);
+                                var gdist = tgp.GetDistance(p.gpos_f);
                                 if (gdist < 6) {
                                     e.danger_k = 1.5f;
-                                    new_it = new EnemyTask(e.id, e.gpos, tgp, "Move");
+                                    new_it = new EnemyTask(e.id, e, tgp, "Move");
                                     SetCell(tgp);
                                     break;
                                 }
@@ -85,7 +85,7 @@ namespace Stas.GA {
                                 e.danger_k = 2;
                                 danger_enemy.Add(e);
                                 e.target = trg;
-                                new_it ??= new EnemyTask(e.id, e.gpos, trg.gpos, "Hit");
+                                new_it ??= new EnemyTask(e.id, e, trg.gpos_f, "Hit");
                                 var _sn = "Skill"; //skill name; cant be reading right now but we will try mb next time
                                 var skill = actor.CurrentAction.skill;
                                 if (actor.CurrentAction.Address!=default
@@ -95,7 +95,7 @@ namespace Stas.GA {
                                     else if (!string.IsNullOrEmpty(skill.InternalName)) { 
                                     }
                                 }
-                                var dist = aw.tgp.GetDistance(p.gpos);
+                                var dist = aw.tgp.GetDistance(p.gpos_f);
                                 if (dist < 20) {
                                     new_it.info = _sn; //"Hit" => "Skill"
                                     e.danger_k = 3; //2=>3
@@ -116,10 +116,10 @@ namespace Stas.GA {
                         return;
                     }
                     foreach (var p in frame_party) {
-                        var gdist = tgp.GetDistance(p.gpos);
+                        var gdist = tgp.GetDistance(p.gpos_f);
                         if (gdist < 6) {
                             e.danger_k = 1.5f;
-                            new_it = new EnemyTask(e.id, e.gpos, tgp, "PF_move");
+                            new_it = new EnemyTask(e.id, e, tgp, "PF_move");
                             SetCell(tgp);
                             break;
                         }

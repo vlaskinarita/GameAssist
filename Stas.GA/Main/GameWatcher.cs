@@ -5,14 +5,9 @@ using System.Runtime.InteropServices;
 namespace Stas.GA;
 
 public partial class ui {
-    static bool closeForcefully = false;
-  
-    static Thread choise_thread, watcher_thread;
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="PrecessWatcher" /> class.
-    /// </summary>
+    static Thread game_check_thread, top_ptr_thread;
     static void StartGameWatcher() {
-        choise_thread = new Thread(() => {
+        game_check_thread = new Thread(() => {
             while (b_running) {
                 if (!DrawMain.b_ready) {
                     AddToLog("w8 DrawMain b_ready...", MessType.Warning);
@@ -25,7 +20,7 @@ public partial class ui {
                     Thread.Sleep(3000);
                 }
                 else if (_pa.Length == 1) {
-                    if (game_process != null) {
+                    if (!b_bad_process) {
                         if (game_process.Id != _pa[0].Id) {
                             CloseGame();
                             game_process = _pa[0];
@@ -51,29 +46,17 @@ public partial class ui {
                 Thread.Sleep(60); //cpu free
             };
         });
-        choise_thread.IsBackground = true;
-        choise_thread.Start();
+        game_check_thread.IsBackground = true;
+        game_check_thread.Start();
 
-        watcher_thread = new Thread(() => {
+        top_ptr_thread = new Thread(() => {
             while (b_running) {
-                // Have to check MainWindowHandle because sometime HasExited returns false even when game isn't running..
-                try {
-                    if (b_bad_process) {
-                        closeForcefully = false;
-                        CloseGame();
-                    }
-                }
-                catch (Exception) {
-                    closeForcefully = false;
-                    CloseGame();
-                }
-                   
                 curr_top_ptr = EXT.GetForegroundWindow();
                 Thread.Sleep(100);
             }
         });
-        watcher_thread.IsBackground = true;
-        watcher_thread.Start();
+        top_ptr_thread.IsBackground = true;
+        top_ptr_thread.Start();
     }
     static bool no_cpu, no_mem;
     static void GetMemPerf() {
@@ -84,7 +67,6 @@ public partial class ui {
             if (GlobalMemoryStatusEx(memStatus)) {
                 mem = 100 - (float)memStatus.ullAvailPhys / memStatus.ullTotalPhys * 100;
             }
-
         }
         catch (Exception ex) {
             no_mem = true;

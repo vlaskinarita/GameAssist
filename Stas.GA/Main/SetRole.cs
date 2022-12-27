@@ -31,7 +31,7 @@ public partial class ui {
                 break;
             case Role.None:
                 tasker?.Stop("SetRole");
-                tasker = null;
+                tasker = new None();
                 udp_master?.Dispose();
                 udp_bot?.Dispose();
                 break;

@@ -42,7 +42,8 @@ public struct Patt_wrapp {
 public abstract class iSave {
     public virtual string fname {
         get {
-            var exe_dir = Assembly.GetExecutingAssembly().Location;
+            var exe_dir = AppContext.BaseDirectory;
+            //var exe_dir = Assembly.GetExecutingAssembly().Location;
             var dir = Path.GetDirectoryName(exe_dir);
             return Path.Combine(dir, tname + ".sett");
         }
@@ -53,7 +54,7 @@ public abstract class iSave {
     public iSave() { //_extension
         created_date = DateTime.Now;
     }
-    public virtual T Load<T>(Action if_err = null) where T : iSave, new() {
+    public virtual T Load<T>() where T : iSave, new() {
         try {
             if (!File.Exists(fname)) {
                 ui.AddToLog(tname + ".loading err: Not founf=[" + fname + "]", MessType.Error);
@@ -61,19 +62,13 @@ public abstract class iSave {
                 return new T();
             }
             else
-                return FILE.LoadJson<T>(fname, if_err);
+                return FILE.LoadJson<T>(fname);
         }
         catch (Exception) {
-            if (if_err == null) {
-                if (File.Exists(fname))
-                    File.Delete(fname);
-                FILE.SaveAsJson(this, fname);
-                return new T();
-            }
-            else {
-                if_err.Invoke();
-                return null;
-            }
+            if (File.Exists(fname))
+                File.Delete(fname);
+            FILE.SaveAsJson(this, fname);
+            return new T();
         }
     }
     public virtual void Save() {
@@ -84,9 +79,9 @@ public abstract class iSave {
     }
 }
 public abstract class iSett : iSave {
-    public override T Load<T>(Action if_err = null) {
+    public override T Load<T>() {
         Debug.Assert(!string.IsNullOrEmpty(fname) && fname.EndsWith(".sett"));
-        return base.Load<T>(if_err);
+        return base.Load<T>();
     }
     public override void Save() {
         Debug.Assert(!string.IsNullOrEmpty(fname) && fname.EndsWith(".sett"));

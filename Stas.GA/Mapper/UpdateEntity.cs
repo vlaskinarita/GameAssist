@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using sh = Stas.GA.SpriteHelper;
 using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
@@ -78,15 +79,31 @@ public partial class AreaInstance  {
             }
         }
         GetBlight();
-        //GetExped();
         GetParty();
-        //ui.AddToLog("ent to mi time=[" + sw_etm_elapsed.Sum().ToRoundStr(5) + "]ms ");
-        //sw_elist.Print("e_added=[" + e_added + "] new/old=[" + entities.Count + "/" + data.Count + "]");
+        danger = curr_danger;
+        UpdMapTasks();//insded iTasks = frame_i_tasks;
         triggers = new ConcurrentBag<Cell>(frame_trigger);//рисуются отдельно
         var sorted = frame_items.OrderBy(e => e.ent.id).ToList();
         map_items = new ConcurrentBag<MapItem>(sorted);
         debug_info = ("ent=[" + data.Count + "/" + entities.Count + "/" + map_items.Count + "]");
+        void UpdMapTasks() {
+            foreach (var ot in iTasks) {
+                var cft = frame_i_tasks.FirstOrDefault(ft => ft.id == ot.id); //current frame task
+                if (cft == null) {
+                    var deleted = iTasks.Where(t => t.id != ot.id);
+                    iTasks = new ConcurrentBag<iTask>(deleted);
+                }
+                else {
+                    ot.to = cft.to;
+                }
+            }
 
+            foreach (var ft in frame_i_tasks) {
+                var old = iTasks.FirstOrDefault(t => t.id == ft.id);
+                if (old == null)
+                    iTasks.Add(ft);
+            }
+        }
         void TryRemoveOldEntyty() {
             if (ui.b_contrl)
                 return;

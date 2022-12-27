@@ -5,21 +5,16 @@ using V2 = System.Numerics.Vector2;
 
 
 namespace Stas.GA;
-public class MapTask : iTask {
-    public override V2 from => V2.Zero;
-    public MapTask(uint _id, V2 _to, string _info) : base(_id, _to, _info) {
-    }
-}
 public class MyTask : iTask {
     public override V2 from => new V2(ui.me.pos.X, ui.me.pos.Y) * ui.worldToGridScale;
     public MyTask(uint _id, V2 _to, string _info) : base(_id, _to, _info) {
     }
 }
 public class EnemyTask : iTask {
-    V2 _from;
-    public override V2 from => _from;
-    public EnemyTask(uint _id, V2 from, V2 _to, string _info) : base(_id, _to, _info) {
-        _from = from;
+    Entity e;
+    public override V2 from => e.gpos_f;
+    public EnemyTask(uint _id, Entity _e, V2 _to, string _info) : base(_id, _to, _info) {
+        e = _e;
     }
 }
 public abstract class iTask {

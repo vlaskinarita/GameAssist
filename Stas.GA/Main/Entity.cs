@@ -32,16 +32,16 @@ public partial class Entity : RemoteObjectBase {
             return;
         }
         id = entityData.Id;
+      
         if (eType == eTypes.Useless) {
             // let's not read or parse any useless entity components.
             return;
         }
         var c_ptr = entityData.ItemBase.ComponentListPtr;
-        if (c_ptr.TotalElements(1) <= 0 || c_ptr.TotalElements(1) > 1000) {
-            ui.AddToLog("ent.ComponentList size wrong");
-        }
-        else {
-            UpdateComponentData(entityData.ItemBase);
+        last_comp_hash = c_ptr.GetHashCode();
+        UpdateComponentData(entityData.ItemBase);
+        if (id == 750) {
+
         }
         ParseEntityType();
         if (MustTick)
@@ -49,6 +49,7 @@ public partial class Entity : RemoteObjectBase {
                 kv.Value.Tick(kv.Value.Address);
             }
     }
+    int last_comp_hash = 0;
     internal bool CanMoove => eType == eTypes.SelfPlayer || eType == eTypes.OtherPlayer ||
      eType == eTypes.Friendly || eType == eTypes.Monster;
     bool MustTick => CanMoove || eType == eTypes.Blockage ||
@@ -349,7 +350,7 @@ public partial class Entity : RemoteObjectBase {
     static string deliriumHiddenMonsterStarting =
         "Metadata/Monsters/LeagueAffliction/DoodadDaemons/DoodadDaemon";
 
-    public readonly ConcurrentDictionary<string, IntPtr> componentAddresses;
+    public readonly ConcurrentDictionary<string, IntPtr> componentAddresses;// 0x00000211e0d14810
     readonly ConcurrentDictionary<string, RemoteObjectBase> componentCache;
 
    

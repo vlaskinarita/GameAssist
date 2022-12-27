@@ -6,4 +6,9 @@ namespace Stas.GA {
         protected override void MakeRoleTask() { 
         }
     }
+    class None : aTasker {
+        protected override void MakeRoleTask() {
+
+        }
+    }
 }

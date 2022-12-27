@@ -19,7 +19,6 @@ public partial class ui {
         Icons.TryGetValue(name, out var result);
         return result;
     }
-
     static Thread frame_thread;
     internal static Memory m { get; private set; }
     public static int w8 { get; } = 16;////1000 / 60 = 16(60 frame sec)
@@ -34,12 +33,6 @@ public partial class ui {
         sett = new Settings().Load<Settings>();
         sett.b_use_ingame_map = false;
         sett.b_develop = true; //<<==change if you're a developer
-        if (sett.my_worker_names.Count == 0) {
-            sett.my_worker_names["MyCurseBot"] = "CurseBot";
-            sett.my_worker_names["MyManaGuard"] = "ManaGuard";
-            sett.my_worker_names["MyAuraBot"] = "AuraBot";
-            sett.my_worker_names["MyDamageDealer"] = "Balista";
-        }
         flask_keys.AddRange(new List<Keys>(){sett.flask_0_key, sett.flask_1_key,
             sett.flask_2_key, sett.flask_3_key, sett.flask_4_key});
         var need_ea = new List<Element>() {gui.map_devise, gui.KiracMission, gui.open_left_panel, gui.open_right_panel,

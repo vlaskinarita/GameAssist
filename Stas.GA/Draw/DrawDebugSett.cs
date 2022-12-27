@@ -64,10 +64,10 @@ namespace Stas.GA {
             ImGuiExt.ToolTip("draw this[GA.Info panel] alvays over(for debug samping mb)[Ctrl+F12]");
             
             ImGui.SameLine();
-            if (ImGui.Checkbox("Tgr", ref ui.sett.b_show_iTask)) {
+            if (ImGui.Checkbox("Targ", ref ui.sett.b_show_iTask)) {
                 ui.sett.Save();
             }
-            ImGuiExt.ToolTip("Chow action trg");
+            ImGuiExt.ToolTip("Show action name/target");
 
             //if (ImGui.Button("SetGameTop")) {
             //    ui.SetTop(ui.game_ptr, 500);

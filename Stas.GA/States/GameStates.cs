@@ -64,6 +64,7 @@ public class GameStates : RemoteObjectBase {
             ui.AddToLog(tName + ".curr_gState=>" + _cgs, MessType.Warning);
             if (curr_gState != gState.EscapeState && curr_gState != gState.InGameState) {
                 ingame_state.Tick(default);
+                ui.ResetWorker();
                 ui.nav.b_ready = false; //dont check hero and visited
                 ui.gui.Tick(default, tName + "=>bad stage");
             }

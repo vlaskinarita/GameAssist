@@ -1,7 +1,7 @@
 ﻿using ImGuiNET;
 using System.Drawing;
 using V2 = System.Numerics.Vector2;
-
+using sh = Stas.GA.SpriteHelper;
 namespace Stas.GA;
 partial class DrawMain {
     //https://github.com/ocornut/imgui/blob/169e3981fdf037b179f1c7296548892ba7837dae/imgui_demo.cpp#L3871-L3978
@@ -86,9 +86,7 @@ partial class DrawMain {
 
         DtawStaticItems();
 
-        if (!ui.sett.b_show_iTask)
-            return;
-        foreach (var it in ui.curr_map.frame_i_tasks) {
+        foreach (var it in ui.curr_map.iTasks) {
             var to = V2.Transform(it.to, ui.MTransform());
             var his = 12;
 
