@@ -1,29 +1,5 @@
 ﻿namespace Stas.GA;
-public class Curse_kola : aWorker {
-    public Curse_kola() {
-        b_use_low_life = true;
-        max_danger = 10; //must stop and cleare if use fater navigation algoritm
-        //main = new Frenzy(Keys.D1, 80, 15, 480);
-        main = new WinterOrb(Keys.D1, 70, 5, 190);
-        jump = new JumpSkill(Keys.D2, 45, 13, 150, 2400);
-        mark = new AssasianMark(Keys.RButton, 80, 31, 250);
-        //rb = new FrostGlobe(Keys.RButton, 8, 28, 320, 5000);
-        //rb = new FrostBomb(Keys.RButton, 80, 15, 250, 2500);
-        //mb = new StoneGolem(Keys.MButton);
-        //totem = new siege_balista(Keys.D3, 80, 29, 60, 4);
-        totem = new glacial_cascade_totem(Keys.D3, 60, 51, 400);
-        d4 = new OrbOfStorms(Keys.D4, 15, 15, 250, 500);
-        //d5 = new TempestShield(Keys.D5);
-        d6 = new Purity_of_elements(Keys.D6);
-        d7 = new Haste(Keys.D7);
-        d8 = new curse_elemental_weakness(Keys.D8);
-        d9 = new curse_temporal_chains(Keys.D9);
-        //d0 = new ArcticArmour(Keys.RButton);
-        d0 = new curse_enfeeble(Keys.D0);
-        CountSkills();
-        //BuffFromHit = new SmiteBuff(Keys.RButton);
-    }
-}
+
 public class Default : aWorker {
     public Default() {
         //b_use_low_life = true;

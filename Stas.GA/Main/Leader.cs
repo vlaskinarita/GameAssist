@@ -79,7 +79,7 @@ namespace Stas.GA.Main
                 return new V2(v3c.X, v3c.Y); ;
             }
         }
-        public uint map_hash => ent == null || !ent.IsValid ? lfn.map_hash : ui.curr_map_hash;
+        public uint map_hash => ent == null ? lfn.map_hash : ui.curr_map_hash;
         public bool b_OK
         {
             get

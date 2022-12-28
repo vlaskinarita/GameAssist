@@ -267,7 +267,10 @@ public partial class Entity : RemoteObjectBase {
             eType = eTypes.Terrain;
         }
         else if (Path.Contains("MiscellaneousObjects")) {
-            eType = eTypes.Misc;
+            if(ui.sett.b_develop && ui.sett.b_draw_misk)
+                eType = eTypes.Misc;
+            else
+                eType = eTypes.Useless;
         }
         else {
             if (Path.Contains("Doodad"))

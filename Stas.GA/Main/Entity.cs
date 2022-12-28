@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Text;
 using ImGuiNET;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
@@ -25,37 +27,41 @@ public partial class Entity : RemoteObjectBase {
         Address = ptr;
         if (Address == IntPtr.Zero)
             return;
-        var entityData = ui.m.Read<EntityOffsets>(this.Address);
-        IsValid = EntityHelper.IsValidEntity(entityData.IsValid);
+        var data = ui.m.Read<EntityOffsets>(this.Address);
+        var c_ptr = data.ItemBase.ComponentListPtr;
+        IsValid = EntityHelper.IsValidEntity(data.IsValid);
         if (!IsValid) {
             // Invalid entity data is normally corrupted. let's not parse it.
             return;
         }
-        id = entityData.Id;
-      
+        id = data.Id;
         if (eType == eTypes.Useless) {
             // let's not read or parse any useless entity components.
             return;
         }
-        var c_ptr = entityData.ItemBase.ComponentListPtr;
-        last_comp_hash = c_ptr.GetHashCode();
-        UpdateComponentData(entityData.ItemBase);
-        if (id == 750) {
 
+        if (c_ptr.TotalElements(1) <= 0 && c_ptr.TotalElements(1) >100 ) {
+            ui.AddToLog(tName + ".Tick err comp_ptr", MessType.Error);
+            return;
         }
-        ParseEntityType();
-        if (MustTick)
-            foreach (var kv in componentCache) {
-                kv.Value.Tick(kv.Value.Address);
-            }
+        var need_parce = false;
+        var cch = c_ptr.GetHashCode();
+        if (cch != last_comp_hash) {
+            UpdateComponentData(data.ItemBase);
+            last_comp_hash = cch;
+            need_parce = true;
+        }
+        if (last_ptr != Address || need_parce) {
+            ParseEntityType();
+            last_ptr = Address;
+        }
+        foreach (var kv in componentCache) {
+            kv.Value.Tick(kv.Value.Address);
+        }
     }
+    IntPtr last_ptr = default;
     int last_comp_hash = 0;
-    internal bool CanMoove => eType == eTypes.SelfPlayer || eType == eTypes.OtherPlayer ||
-     eType == eTypes.Friendly || eType == eTypes.Monster;
-    bool MustTick => CanMoove || eType == eTypes.Blockage ||
-       eType == eTypes.Stage1RewardFIT || eType == eTypes.Stage1FIT || //eType == EntityTypes.Useless ||
-       eType == eTypes.Stage1EChestFIT;
-  
+   
     /// <summary>
     ///     Updates the component data associated with the Entity base object (i.e. item).
     /// </summary>
@@ -86,6 +92,34 @@ public partial class Entity : RemoteObjectBase {
             kv.Value.Tick(kv.Value.Address, "ent=>tick");
         }
     }
+    /// <summary>
+    ///     Gets a value indicating whether this entity can explode or not.
+    /// </summary>
+    public bool CanExplode =>
+        this.eType == eTypes.Monster ||
+        this.eType == eTypes.Useless ||
+        this.eType == eTypes.Stage1RewardFIT ||
+        this.eType == eTypes.Stage1FIT ||
+        this.eType == eTypes.Stage1EChestFIT;
+    /// <summary>
+    ///     Calculate the distance from the other entity.
+    /// </summary>
+    /// <param name="other">Other entity object.</param>
+    /// <returns>
+    ///     the distance from the other entity
+    ///     if it can calculate; otherwise, return 0.
+    /// </returns>
+    public int DistanceFrom(Entity other) {
+        if (this.GetComp<Render>(out var myPosComp) &&
+            other.GetComp<Render>(out var otherPosComp)) {
+            var dx = myPosComp.gpos_f.X - otherPosComp.gpos_f.X;
+            var dy = myPosComp.gpos_f.Y - otherPosComp.gpos_f.Y;
+            return (int)Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        // Console.WriteLine($"Render Component missing in {this.Path} or {other.Path}");
+        return 0;
+    }
     string _metadata;
     public string Metadata {
         get {
@@ -105,7 +139,7 @@ public partial class Entity : RemoteObjectBase {
     }
     public Rarity rarity {
         get {
-            if (IsValid && GetComp<ObjectMagicProperties>(out var omp)) {
+            if (GetComp<ObjectMagicProperties>(out var omp)) {
                 if (omp != null)
                     return omp.Rarity;
             }
@@ -117,8 +151,6 @@ public partial class Entity : RemoteObjectBase {
     Dictionary<GameStat, int> _stats = null;
     public Dictionary<GameStat, int> Stats {
         get {
-            if (!IsValid)
-                return _stats;
             if (GetComp<Stats>(out var stats))
                 _stats = stats.stats;
             return _stats;
@@ -130,7 +162,7 @@ public partial class Entity : RemoteObjectBase {
     Buffs _buffs;
     public Buffs buffs {
         get {
-            if (IsValid && GetComp<Buffs>(out _buffs) && _buffs!=null)
+            if (GetComp<Buffs>(out _buffs) && _buffs!=null)
                 return _buffs;
             return null;
         }
@@ -139,7 +171,7 @@ public partial class Entity : RemoteObjectBase {
     string _renderName = "NoName";
     public string RenderName {
         get {
-            if (IsValid && GetComp<Render>(out var render) && render != null
+            if (GetComp<Render>(out var render) && render != null
                 && render.owner_ptr==this.Address) {
                 _renderName = render.Name;
                 return _renderName;
@@ -150,7 +182,7 @@ public partial class Entity : RemoteObjectBase {
     bool _isTargetable;
     public bool IsTargetable {
         get {
-            if (IsValid && GetComp<Targetable>(out var _targ) && _targ != null 
+            if ( GetComp<Targetable>(out var _targ) && _targ != null 
                         && _targ.owner_ptr == Address) {
                 _isTargetable = _targ.isTargetable;
                 return _isTargetable;
@@ -162,7 +194,7 @@ public partial class Entity : RemoteObjectBase {
     bool _hidden;
     public bool IsHidden {
         get {
-            if (IsValid && GetComp<Buffs>(out var buffs)) {
+            if (GetComp<Buffs>(out var buffs)) {
                 _hidden = buffs != null && buffs.StatusEffects.ContainsKey("hidden_monster");
             }
             return _hidden;
@@ -170,7 +202,7 @@ public partial class Entity : RemoteObjectBase {
     }
     public bool IsFriendly {
         get {
-            if (IsValid && GetComp<Positioned>(out var _pos)) {
+            if (GetComp<Positioned>(out var _pos)) {
                 return _pos != null && _pos.IsFriendly;
             }
             return false;
@@ -179,7 +211,7 @@ public partial class Entity : RemoteObjectBase {
     bool _is_opened;
     public bool IsOpened {
         get {
-            if (IsValid && GetComp<Chest>(out var chest) && chest != null && chest.owner_ptr == Address) {
+            if (GetComp<Chest>(out var chest) && chest != null && chest.owner_ptr == Address) {
                 if (GetComp<Targetable>(out var trg) && trg != null && trg.owner_ptr == Address) {
                     _is_opened = trg.isTargeted || chest.IsOpened;
                 }
@@ -195,7 +227,7 @@ public partial class Entity : RemoteObjectBase {
     float _bd = -1f; //base danger. set -1 for calculate ones
     public float danger {
         get {
-            if (!IsValid || IsDead || IsHidden) {
+            if (IsDead || IsHidden) {
                 return 0;
             }
             else {
@@ -250,35 +282,28 @@ public partial class Entity : RemoteObjectBase {
     public bool IsDead => !IsAlive;
     public bool IsAlive {
         get {
-            if (!IsValid)
-                return false;
-            GetComp<Life>(out var life);
-            if (life == null || life.owner_addr != Address) {
-                return false;
+            if (GetComp<Life>(out var life) ) {
+                return life.Health.Current > 0; 
             }
-            return life.Health.Current > 0;
+            return false;
         }
     }
     V3 _pos;
     public V3 pos {
         get {
-            if (!IsValid)
+            if (GetComp<Render>(out var render)) {
+                //Debug.Assert(render.owner_ptr == Address);
+                _pos.X = render.WorldPosition.X;
+                _pos.Y = render.WorldPosition.Y;
+                _pos.Z = render.WorldPosition.Z + render.ModelBounds.Z;
                 return _pos;
-
-            GetComp<Render>(out var render);
-
-            if (render == null)
-                return _pos;
-
-            _pos.X = render.WorldPosition.X;
-            _pos.Y = render.WorldPosition.Y;
-            _pos.Z = render.WorldPosition.Z + render.ModelBounds.Z;
-            return _pos;
+            }
+            return default;
         }
     }
     public V2 gpos_f {
         get {
-            if (IsValid && GetComp<Render>(out var render)
+            if (GetComp<Render>(out var render)
                 && render != null && render.owner_ptr == Address) {
                     return render.gpos_f;
             }
@@ -287,7 +312,7 @@ public partial class Entity : RemoteObjectBase {
     }
     public V2 gpos {
         get {
-            if (IsValid && GetComp<Positioned>(out var positioned)
+            if (GetComp<Positioned>(out var positioned)
                 && positioned !=null && positioned.owner_ptr == Address) {
                     return positioned.GridPos;
             }
@@ -309,7 +334,7 @@ public partial class Entity : RemoteObjectBase {
     public float gdist_to_me {
         get {
             var plaer = ui.me;
-            if (plaer != null && IsValid && plaer.gpos != V2.Zero) {
+            if (plaer != null && plaer.gpos != V2.Zero) {
                 //var gdist = plaer.gpos.GetDistance(gpos);
                 var fdist = plaer.gpos.GetDistance(gpos);
                 //Debug.Assert(gdist.Round(0)== fdist.Round(0));
@@ -369,7 +394,7 @@ public partial class Entity : RemoteObjectBase {
     ///     Gets or Sets a value indicating whether the entity
     ///     exists in the game or not.
     /// </summary>
-    public bool IsValid { get; private set; }
+    public bool IsValid { get; set; }
     /// <summary>
     ///     Gets a value indicating the type of entity this is.
     /// </summary>

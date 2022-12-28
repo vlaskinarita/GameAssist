@@ -81,7 +81,7 @@ namespace Stas.GA {
                     }
                     if (actor.Action.HasFlag(ActionFlags.UsingAbility)) {
                         foreach (var p in frame_party) {
-                            if (trg != null && trg.IsValid && trg.Address == p.Address) {
+                            if (trg != null && trg.Address == p.Address) {
                                 e.danger_k = 2;
                                 danger_enemy.Add(e);
                                 e.target = trg;

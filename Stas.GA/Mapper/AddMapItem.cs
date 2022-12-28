@@ -8,9 +8,10 @@ namespace Stas.GA;
 public partial class AreaInstance {
     ConcurrentBag<Cell> frame_trigger = new();
     ConcurrentBag<MapItem> frame_items = new();
-    public ConcurrentBag<iTask> iTasks = new ();
-    ConcurrentBag<iTask> frame_i_tasks = new ();
+    public ConcurrentBag<iTask> iTasks = new ConcurrentBag<iTask>();
+    ConcurrentBag<iTask> frame_i_tasks = new ConcurrentBag<iTask>();
     HashSet<string> quest_ent = new HashSet<string>();
+    string quest_ent_fname = @"C:\Log\quest_ent.txt";
 
     MapItem AddMapItem(Entity e) {
         if (e.pos == V3.Zero) {
@@ -29,8 +30,8 @@ public partial class AreaInstance {
         if (string.IsNullOrEmpty(info)) {
             info = pa_info(e);
         }
-        if (e.id == debug_id) {//debug_id
-                               //  System.Diagnostics.Debugger.Break();
+        if (e.id == 3221227159) {//debug_id
+                                 //  System.Diagnostics.Debugger.Break();
         }
         var mi = new MapItem(e, info);
         SetRarity(mi);
@@ -42,6 +43,10 @@ public partial class AreaInstance {
             case eTypes.Door:
                 return GetDoor(e);
             case eTypes.Quest: {
+                    if (!quest_ent.Contains(e.Path)) {
+                        quest_ent.Add(e.Path);
+                        File.AppendAllLines(quest_ent_fname, new string[] { e.Path });
+                    }
                     if (e.GetComp<MinimapIcon>(out _))
                         return asStaticMapItem(e, miType.Quest, MapIconsIndex.QuestItem);
                     else
@@ -109,14 +114,40 @@ public partial class AreaInstance {
             case eTypes.LimitedLife: {
                     if (e.Path.EndsWith("GroundBlade"))
                         return null;
-                    break;
+                    mi.uv = sh.GetUV(MapIconsIndex.Short_life);
+                    return mi;
                 }
+
+            case eTypes.Projectile:
             case eTypes.Effects: {
+                    mi.uv = sh.GetUV(MapIconsIndex.Effect);
+                    //if (e.id == 946) {
+                    //    e.GetComp<Animated>(out var anim);
+                    //    anim.GetAllEnt();
+                    //}
+                    if (!ui.sett.b_draw_proj)
+                        return null;
+                    return mi;
+                }
+            case eTypes.NeedCheck: {
                     mi.uv = sh.GetUV(MapIconsIndex.Effect);
                     return mi;
                 }
+            case eTypes.Terrain: {
+                    if (e.Path.Contains("Roomb")) {
+                        mi.uv = sh.GetUV(MapIconsIndex.TrapGeer);
+                        return mi;
+                    }
+                    else {
+                        break;
+                    }
+                }
             default: {
-                    if (ui.b_contrl) {
+                    if (ui.b_contrl && ui.sett.b_develop) {
+                        if (!ui.sett.b_draw_misk && e.eType == eTypes.Misc)
+                            return null;
+                        if (!ui.sett.b_draw_useles && e.eType == eTypes.Useless)
+                            return null;
                         mi.uv = sh.GetUV(MapIconsIndex.BlightPathInactive);
                         return mi;
                     }
@@ -145,12 +176,12 @@ public partial class AreaInstance {
     }
     ConcurrentBag<Entity> frame_party = new();
     string pa_info(Entity e) {
-        if (!id_ifos.ContainsKey(e.id)) {
-            lock (id_ifos) {
+        lock (id_ifos) {
+            if (!id_ifos.ContainsKey(e.id)) {
                 var pa = e.Path.Split('/');
                 id_ifos[e.id] = pa[pa.Length - 1];
             }
+            return id_ifos[e.id];
         }
-        return id_ifos[e.id];
     }
 }

@@ -122,7 +122,6 @@ public partial class AreaInstance {
         blight_beams.Clear();
         bad_etypes.Clear();
         id_ifos.Clear();
-        id_ifos.Clear();
         bad_map_items.Clear();
         static_items.Clear();
         make_ticks = 0;

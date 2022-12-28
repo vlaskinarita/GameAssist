@@ -25,8 +25,7 @@ public partial class DrawMain {
     }
     ImDrawListPtr map_ptr;
     StringBuilder sp_warn = new StringBuilder();
-    SW sw_main = new SW("Main");
-    SW sw = new SW("asd");
+    SW sw_main = new SW("Draw Map:");
     int fi = 0;
     public void Draw() {
         var b_top = ui.b_game_top || ui.b_imgui_top;

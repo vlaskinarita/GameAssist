@@ -39,7 +39,7 @@ public partial class ui {
         }
         if (worker?.link != null) {
             if (new_link == null) {
-                if (leader.ent != null && leader.ent.IsValid) {
+                if (leader.ent != null) {
                     curr_link = leader.ent;
                 }
             }

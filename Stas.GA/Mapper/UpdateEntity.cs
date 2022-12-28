@@ -6,30 +6,21 @@ using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 namespace Stas.GA;
 public partial class AreaInstance  {
-    SW sw_elist = new SW("Make ent list");
-    SW sw_ue = new SW("Ent update");
-    Stopwatch sw_etm = new Stopwatch();
-    List<double> sw_etm_elapsed = new List<double>();
+    internal SW sw_ent_upd = new SW("Ent upd:");
     void UpdateEntities(StdMap ePtr, bool addToCache = true) {
         FrameClear();
-        sw_ue.Restart();
-
+        sw_ent_upd.Restart();
         var entities = ui.m.ReadStdMapAsList<EntityNodeKey, EntityNodeValue>(ePtr, EntityFilter.IgnoreVisualsAndDecorations);
-        if (ui.b_contrl && ui.sett.b_draw_misk && ui.sett.b_develop)
+        if (ui.b_contrl  && ui.sett.b_develop)
             entities = ui.m.ReadStdMapAsList<EntityNodeKey, EntityNodeValue>(ePtr, null);
         //entities = entities.OrderBy(s => s.Key.id).ToList();
         //sw_cash.Print("ReadStdMapAsList");
-        sw_ue.Restart();
         var data = AwakeEntities;
-        TryRemoveOldEntyty();
+        TryRemoveExplodedEnt();
         TryGetEntToDebug();
         if (mi_debug != null)
             return;
-        sw_elist.Restart();
         var e_added = 0;
-        sw_etm_elapsed.Clear();
-
-        var ent_lodas = new List<double>();
 #if DEBUG
         for (var i = 0; i < entities.Count; i++) {//for step-by-step debugging use here
             calc(i);
@@ -68,13 +59,11 @@ public partial class AreaInstance  {
                     return;
                 if (frame_di != null)
                     return;
-                sw_etm.Restart();
                 Debug.Assert(e.eType != eTypes.Unidentified);
                 var nmi = AddMapItem(e);//new map item
-                sw_etm_elapsed.Add(sw_etm.Elapsed.TotalMilliseconds);
                 if (nmi != null) {
                     frame_items.Add(nmi);
-                    SetDanger(e);
+                    //SetDanger(e);
                 }
             }
         }
@@ -86,6 +75,7 @@ public partial class AreaInstance  {
         var sorted = frame_items.OrderBy(e => e.ent.id).ToList();
         map_items = new ConcurrentBag<MapItem>(sorted);
         debug_info = ("ent=[" + data.Count + "/" + entities.Count + "/" + map_items.Count + "]");
+        sw_ent_upd.MakeRes();
         void UpdMapTasks() {
             foreach (var ot in iTasks) {
                 var cft = frame_i_tasks.FirstOrDefault(ft => ft.id == ot.id); //current frame task
@@ -104,20 +94,26 @@ public partial class AreaInstance  {
                     iTasks.Add(ft);
             }
         }
-        void TryRemoveOldEntyty() {
-            if (ui.b_contrl)
-                return;
+        //remove all close ent poternsion not valid but still have isValid from server
+        void TryRemoveExplodedEnt() {
             foreach (var kv in data) {
-                var e = kv.Value;
-                var so_faar = e.CanMoove && e.gdist_to_me > ui.sett.max_entyty_valid_gdistance;
-                var is_dead = e.eType == eTypes.Monster && e.IsDead;
-                if (!e.IsValid || so_faar || is_dead) { //dont delete misk etc for prevent remake it
-                    var done = AwakeEntities.TryRemove(kv.Key, out _);
-                    if (!done) {
-                        ui.AddToLog("cant delete ent from cash", MessType.Error);
+                if (!kv.Value.IsValid) {
+                    //var dist = this.player.DistanceFrom(kv.Value);
+                    var dist = kv.Value.gdist_to_me;
+                    var bad_dist = kv.Value.CanExplode && dist < 150;
+                    if (kv.Value.eType == eTypes.Friendly || bad_dist) {
+                        /* This logic isn't perfect in case something happens to the entity before
+                         we can cache the location of that entity. In that case we will just
+                         delete that entity anyway. This activity is fine as long as it doesn't
+                         crash the GameHelper. This logic is to detect if entity exploded due to
+                         explodi-chest or just left the network bubble since entity leaving network
+                         bubble is same as entity exploded.*/
+                        data.TryRemove(kv.Key, out _);
                     }
                 }
+                kv.Value.IsValid = false;
             }
+              
         }
     }
     void GetParty() {

@@ -116,8 +116,8 @@ namespace Stas.GA {
         opened_chest_big = 80,
         Skull = 81,
         Effect = 82,
-        z83 = 83,
-        z84 = 84,
+        TrapGeer = 83,
+        Short_life = 84,
 
         HeistAgility = 85,              //start row index = 6
         Heist_86 = 86,

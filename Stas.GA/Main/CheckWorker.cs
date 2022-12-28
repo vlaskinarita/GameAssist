@@ -45,7 +45,7 @@ public partial class ui {
                 MethodInfo method = w.GetType().GetMethod("Load");
                 method = method.MakeGenericMethod(t);
                 Type[] arg = { null }; //число аргументов должно соотвествовать числу аргуметов в методе
-                aWorker res = (aWorker)method.Invoke(w, arg);
+                aWorker res = (aWorker)method.Invoke(w, null);
                 return res;
             }
             catch (Exception ex) {

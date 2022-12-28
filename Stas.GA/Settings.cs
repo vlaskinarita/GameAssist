@@ -2,7 +2,8 @@
 namespace Stas.GA;
 
 public partial class Settings : iSett {
- 
+
+    #region Flasks setup
     [JsonInclude]
     public bool b_use_left_flasks = false;
     [JsonInclude]
@@ -10,32 +11,33 @@ public partial class Settings : iSett {
     [JsonInclude]
     public bool b_use_life_flask = false;
     [JsonInclude]
-    public bool b_use_mana_flask = false; 
+    public bool b_use_mana_flask = false;
     [JsonInclude]
     public bool b_use_silver_flask = false;
     [JsonInclude]
     public int trigger_life_left_persent = 50;
     [JsonInclude]
-    public int  cast_price = 20;
+    public int cast_price = 20;
     [JsonInclude]
     public int silver_gdist = 100;
     [JsonInclude]
-    public Keys two_left_flask_key  = Keys.Q;
+    public Keys two_left_flask_key = Keys.Q;
     [JsonInclude]
     public Keys two_right_flask_key = Keys.W;
-    public Keys life_flask_key { get; set; } = Keys.E;  
+    public Keys life_flask_key { get; set; } = Keys.E;
     public Keys mana_flask_key { get; set; } = Keys.F6;
     public Keys silver_flask_key { get; set; } = Keys.F5;
     [JsonInclude]
-    public Keys flask_0_key  = Keys.F5;
+    public Keys flask_0_key = Keys.F5;
     [JsonInclude]
-    public Keys flask_1_key  = Keys.F6;
+    public Keys flask_1_key = Keys.F6;
     [JsonInclude]
-    public Keys flask_2_key  = Keys.E;
+    public Keys flask_2_key = Keys.E;
     [JsonInclude]
     public Keys flask_3_key = Keys.F7;
     [JsonInclude]
     public Keys flask_4_key = Keys.F8;
+    #endregion
 
     [JsonInclude]
     public Role role = Role.None;
@@ -74,6 +76,8 @@ public partial class Settings : iSett {
     public bool b_gui_debug_on_top = false;
     [JsonInclude]
     public bool b_draw_map_fps = true;
+    [JsonInclude]
+    public bool b_draw_ent_fps = true;
     [JsonInclude]
     public bool b_draw_log_first = true;
     [JsonInclude]
@@ -131,6 +135,10 @@ public partial class Settings : iSett {
     public bool b_show_info_over = false;
     [JsonInclude]
     public bool b_draw_misk = false;
+    [JsonInclude]
+    public bool b_draw_proj = false;
+    [JsonInclude]
+    public bool b_draw_useles = false;
     [JsonInclude]
     public bool b_draw_bad_centr = false;
     [JsonInclude]

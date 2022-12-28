@@ -27,11 +27,22 @@ namespace Stas.GA {
             ImGuiExt.ToolTip("draw bad center area");
 
             ImGui.SameLine();
-            if (ImGui.Checkbox("Fps", ref ui.sett.b_draw_map_fps)) {
+            if (ImGui.Checkbox("MapFPS", ref ui.sett.b_draw_map_fps)) {
                 ui.sett.Save();
             }
-            ImGuiExt.ToolTip("show map drawing fps - optimal value (for drawing without jerks) above 2500 fps");
+            ImGuiExt.ToolTip("show map drawing fps\noptimal value (for drawing without jerks) above 100 fps");
+            
+            ImGui.SameLine();
+            if (ImGui.Checkbox("EntFPS", ref ui.sett.b_draw_ent_fps)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("show ent update drawing fps\noptimal value (for drawing without jerks) 200+ fps");
 
+            ImGui.SameLine();
+            if (ImGui.Checkbox("Over", ref ui.sett.b_show_info_over)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("draw this[GA.Info panel] alvays over(for debug samping mb)[Ctrl+F12]");
 
             ImGui.SameLine();
             if (ImGui.Checkbox("Develop", ref ui.sett.b_develop)) {
@@ -58,10 +69,18 @@ namespace Stas.GA {
             ImGuiExt.ToolTip("draw misks as debug enetity(alot spam on map)");
 
             ImGui.SameLine();
-            if (ImGui.Checkbox("Over", ref ui.sett.b_show_info_over)) {
+            if (ImGui.Checkbox("Proj", ref ui.sett.b_draw_proj)) {
                 ui.sett.Save();
             }
-            ImGuiExt.ToolTip("draw this[GA.Info panel] alvays over(for debug samping mb)[Ctrl+F12]");
+            ImGuiExt.ToolTip("draw Projectile as debug enetity(alot spam on map)");
+
+            ImGui.SameLine();
+            if (ImGui.Checkbox("Useles", ref ui.sett.b_draw_useles)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("draw Useles as debug enetity(alot spam on map)");
+
+           
             
             ImGui.SameLine();
             if (ImGui.Checkbox("Targ", ref ui.sett.b_show_iTask)) {

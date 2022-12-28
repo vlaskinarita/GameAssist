@@ -98,6 +98,11 @@ namespace Stas.GA {
                 if(res.Item1 !=null)
                     ImGui.Button(res.Item1);
             }
+            if (ui.sett.b_draw_ent_fps) {
+                var res = ui.curr_map.sw_ent_upd.GetRes;
+                if (res.Item1 != null)
+                    ImGui.Button(res.Item1);
+            }
             DrawTabs();
             ImGui.SetWindowFontScale(1f);
             ImGui.End();

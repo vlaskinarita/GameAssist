@@ -36,7 +36,7 @@ public partial class AreaInstance : RemoteObjectBase {
         MonsterLevel = data.MonsterLevel;
         AreaHash = data.CurrentAreaHash;
         player.Tick(data.LocalPlayerPtr, tName + ".Tick");
-        Debug.Assert(player.gpos != default && player.pos != default);
+        //Debug.Assert(player.gpos != default && player.pos != default);
         if (player.gpos_f != default) {
             lock (my_pos_locker) {
                 me_pos.Add(player.gpos_f);
