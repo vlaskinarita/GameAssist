@@ -636,7 +636,11 @@ namespace Stas.ImGuiNet {
 
         public void NewFrame() {
             if(_fontSampler == null) {
-                CreateDeviceObjects();
+                try {
+                    CreateDeviceObjects();
+                }
+                catch (Exception ex) {
+                }
             }
         }
     }

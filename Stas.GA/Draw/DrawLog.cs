@@ -60,6 +60,6 @@ partial class DrawMain {
         //ImGui.PushStyleColor(ImGuiCol.CheckMark, Color.Gray.ToImgui());
         //ImGui.Checkbox("Critical", ref ui.sett.b_log_critical);
         //ImGui.PopStyleColor();
-        //ImGuiHelper.ToolTip("Critical logs[purple] - cant be disabled");
+        //ImGuiExt.ToolTip("Critical logs[purple] - cant be disabled");
     }
 }

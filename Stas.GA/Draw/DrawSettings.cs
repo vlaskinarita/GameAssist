@@ -31,7 +31,7 @@ namespace Stas.GA {
             //if (ImGui.Checkbox("Alt", ref ui.sett.b_alt_reset)) {
             //    ui.sett.Save();
             //}
-            //ImGuiHelper.ToolTip("Alt downing stop curr_task /reset tasker...");
+            //ImGuiExt.ToolTip("Alt downing stop curr_task /reset tasker...");
 
             ImGui.SameLine();
             if (ImGui.Checkbox("Close modal", ref ui.sett.b_auto_close_modals)) {

@@ -11,7 +11,7 @@ public partial class AreaInstance {
     public ConcurrentBag<iTask> iTasks = new ConcurrentBag<iTask>();
     ConcurrentBag<iTask> frame_i_tasks = new ConcurrentBag<iTask>();
     HashSet<string> quest_ent = new HashSet<string>();
-    string quest_ent_fname = @"C:\Log\quest_ent.txt";
+    string quest_ent_fname = @"quest_ent.txt";
 
     MapItem AddMapItem(Entity e) {
         if (e.pos == V3.Zero) {

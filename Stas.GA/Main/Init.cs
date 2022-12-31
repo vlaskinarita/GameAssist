@@ -23,6 +23,7 @@ public partial class ui {
     internal static Memory m { get; private set; }
     public static int w8 { get; } = 16;////1000 / 60 = 16(60 frame sec)
     public static List<Keys> flask_keys = new();
+    public static AHK ahk { get; private set; }
     static ui() {
         Icons = new Dictionary<string, MapIconsIndex>(200);
         foreach (var icon in Enum.GetValues(typeof(MapIconsIndex))) {
@@ -45,6 +46,7 @@ public partial class ui {
         StartGameWatcher();
         SetRole();
         looter = new Looter();
+        ahk = new AHK();
         need_upd_per_frame = new List<RemoteObjectBase>() {   }; //camera//gui
         var game_not_loadin = 0;
 

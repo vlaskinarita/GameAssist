@@ -91,7 +91,7 @@ namespace Stas.GA {
             //if (ImGui.Button("SetGameTop")) {
             //    ui.SetTop(ui.game_ptr, 500);
             //}
-            //ImGuiHelper.ToolTip("testing SetTop");
+            //ImGuiExt.ToolTip("testing SetTop");
         }
     }
 }

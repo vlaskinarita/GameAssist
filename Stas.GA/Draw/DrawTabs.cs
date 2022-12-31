@@ -49,7 +49,7 @@ partial class DrawMain {
             //    DrawExpedSett();
             //    ImGui.EndTabItem();
             //}
-            //ImGuiHelper.ToolTip("Show/hide exped settings");
+            //ImGuiExt.ToolTip("Show/hide exped settings");
 
             if (ImGui.BeginTabItem("Visual")) {
                 DrawVisual();

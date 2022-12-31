@@ -18,8 +18,9 @@ public partial class Entity : RemoteObjectBase {
        id = 0;
        IsValid = false;
        eType = eTypes.Unidentified;
+       isnearby = false;
     }
-   
+
     internal Entity(IntPtr address) : this() {
         this.Address = address;
     }
@@ -92,6 +93,8 @@ public partial class Entity : RemoteObjectBase {
             kv.Value.Tick(kv.Value.Address, "ent=>tick");
         }
     }
+    bool isnearby;
+    public bool IsNearby => this.IsValid && this.isnearby;
     /// <summary>
     ///     Gets a value indicating whether this entity can explode or not.
     /// </summary>
