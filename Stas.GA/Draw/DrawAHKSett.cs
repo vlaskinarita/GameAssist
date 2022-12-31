@@ -1,10 +1,11 @@
 ﻿using ImGuiNET;
+using System.Drawing;
 
 namespace Stas.GA;
 partial class DrawMain {
     public void DrawAHKSettings() {
-        Vector4 impTextColor = new(255, 255, 0, 255);
-        ImGui.PushTextWrapPos(ImGui.GetContentRegionMax().X);
+
+        var impTextColor = Color.Gray.ToImguiVec4();
         ImGui.TextColored(impTextColor, "Do not trust Settings.txt files for Auto Hokey Trigger from sources you have not personally verified. " +
                           "They may contain malicious content that can compromise your computer. " +
                           "Using profiles with incorrectly configured rules may also lead to you being kicked from the server, " +

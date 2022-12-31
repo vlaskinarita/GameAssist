@@ -24,7 +24,7 @@
 	
 	<ItemGroup>
     <PackageReference Include="ImGui.NET">
-      <Version>1.75.0</Version>
+      <Version>1.89.2</Version>
     </PackageReference>
     <PackageReference Include="ppy.SDL2-CS">
       <Version>1.0.611-alpha</Version>

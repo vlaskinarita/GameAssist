@@ -195,7 +195,6 @@ public class FILE {
         CommentHandling = JsonCommentHandling.Allow
     };
 
-
     public static void SaveAsJson<T>(T t, string fname) {
         var opt = new JsonSerializerOptions {
             WriteIndented = true,

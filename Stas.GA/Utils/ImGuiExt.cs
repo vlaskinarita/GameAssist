@@ -45,7 +45,7 @@ public static class ImGuiExt {
     /// <param name="g">color selector green 0 - 255.</param>
     /// <param name="b">color selector blue 0 - 255.</param>
     public static void DrawRect(Vector2 pos, Vector2 size, byte r, byte g, byte b) {
-        ImGui.GetForegroundDrawList().AddRect(pos, pos + size, Color(r, g, b, 255), 0f, ImDrawCornerFlags.None, 4f);
+        ImGui.GetForegroundDrawList().AddRect(pos, pos + size, Color(r, g, b, 255), 0f, 0, 4f);
     }
 
     /// <summary>

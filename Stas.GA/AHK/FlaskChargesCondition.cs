@@ -1,4 +1,6 @@
 ﻿using ImGuiNET;
+using System.Text.Json.Serialization;
+
 namespace Stas.GA; 
 
 
@@ -10,10 +12,10 @@ public class FlaskChargesCondition : ICondition
     private static readonly OperatorType[] SupportedOperatorTypes = { OperatorType.BIGGER_THAN, OperatorType.LESS_THAN };
     private static readonly FlaskChargesCondition ConfigurationInstance = new(OperatorType.BIGGER_THAN, 1, 10);
 
-    [JsonProperty] private OperatorType @operator;
-    [JsonProperty] private int flaskSlot;
-    [JsonProperty] private int charges;
-    [JsonProperty] private IComponent component;
+    [JsonInclude] private OperatorType @operator;
+    [JsonInclude] private int flaskSlot;
+    [JsonInclude] private int charges;
+    [JsonInclude] private IComponent component;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="FlaskChargesCondition" /> class.
@@ -67,7 +69,7 @@ public class FlaskChargesCondition : ICondition
     public bool Evaluate()
     {
         var isConditionValid = false;
-        var flask = Core.States.InGameStateObject.CurrentAreaInstance.ServerDataObject.FlaskInventory[0, this.flaskSlot - 1];
+        var flask = ui.flasks[0, this.flaskSlot - 1];
         if (flask.Address != IntPtr.Zero && flask.GetComp<Charges>(out var chargesComponent))
         {
             isConditionValid = this.@operator switch

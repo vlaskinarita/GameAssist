@@ -17,7 +17,7 @@ public class DynamicConditionState : IDynamicConditionState
         {
             if (ui.me.GetComp<Buffs>(out var playerBuffs))
             {
-                this.Ailments = JsonDataHelper.StatusEffectGroups
+                this.Ailments = AHK.StatusEffectGroups
                                               .Where(x => x.Value.Any(playerBuffs.StatusEffects.ContainsKey))
                                               .Select(x => x.Key).ToHashSet();
                 this.Buffs = new BuffDictionary(playerBuffs.StatusEffects);

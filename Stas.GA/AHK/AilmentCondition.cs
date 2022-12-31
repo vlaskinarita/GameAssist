@@ -63,7 +63,7 @@ public class AilmentCondition : ICondition
     public bool Evaluate()
     {
         var isConditionValid = false;
-        if (JsonDataHelper.StatusEffectGroups.TryGetValue(this.statusEffectGroupKey, out var statusEffects))
+        if (AHK.StatusEffectGroups.TryGetValue(this.statusEffectGroupKey, out var statusEffects))
         {
             if (ui.me.GetComp<Buffs>(out var buffComponent))
             {
@@ -83,9 +83,8 @@ public class AilmentCondition : ICondition
         ImGui.SameLine();
         if (expand)
         {
-            ImGuiExt.IEnumerableComboBox(
-                "ailment.##AilmentCondition",
-                JsonDataHelper.StatusEffectGroups.Keys,
+            ImGuiExt.IEnumerableComboBox( "ailment.##AilmentCondition",
+                AHK.StatusEffectGroups.Keys,
                 ref this.statusEffectGroupKey);
         }
         else

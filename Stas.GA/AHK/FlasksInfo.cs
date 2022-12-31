@@ -62,7 +62,7 @@ public class FlasksInfo : IFlasksInfo
     public FlasksInfo(InGameState state)
     {
         this.flasks = Enumerable.Range(0, FlaskCount)
-                                .Select(i => ui.curr_map.server_data.FlaskInventory[0, i])
+                                .Select(i => ui.flasks[0, i])
                                 .Select(f => FlaskInfo.From(state, f))
                                 .ToList();
     }

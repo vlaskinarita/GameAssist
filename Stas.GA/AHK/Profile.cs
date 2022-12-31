@@ -84,7 +84,7 @@ public class Profile
 
     private void DrawConfirmationPopup()
     {
-        ImGui.SetNextWindowPos(new Vector2(Core.Overlay.Size.X / 3f, Core.Overlay.Size.Y / 3f));
+        ImGui.SetNextWindowPos(new Vector2(ui.ahk.size.X / 2f, ui.ahk.size.Y / 3f));
         if (ImGui.BeginPopup("RuleDeleteConfirmation"))
         {
             ImGui.Text($"Do you want to delete rule with name: {this.Rules[this.ruleIndexToDelete].Name}?");

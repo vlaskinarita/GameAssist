@@ -41,6 +41,10 @@ public partial class Settings : iSett {
 
     #region AHK
     [JsonInclude]
+    public bool b_use_gh_map = false;
+    [JsonInclude]
+    public bool b_use_gh_flask = true;
+    [JsonInclude]
     public Keys DumpStatusEffectOnMe = Keys.K;
     [JsonInclude]
     public bool EnableAutoQuit= false;
@@ -87,8 +91,7 @@ public partial class Settings : iSett {
     public bool b_develop = false;
     [JsonInclude]
     public float info_font_size = 1f;
-    [JsonInclude]
-    public bool b_use_ingame_map = false;
+   
     [JsonInclude]
     public bool b_use_Edge_only = false;
 

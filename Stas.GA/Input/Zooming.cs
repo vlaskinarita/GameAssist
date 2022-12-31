@@ -7,7 +7,7 @@ namespace Stas.GA;
 
 public partial class InputChecker {
     void Zooming() {
-        if (ui.sett.b_use_ingame_map) {
+        if (ui.sett.b_use_gh_map) {
             //if (Keyboard.IsKeyDown(Keys.NumPad5, "ICh")) {
             //    ui.map_offset = V2.Zero;
             //}

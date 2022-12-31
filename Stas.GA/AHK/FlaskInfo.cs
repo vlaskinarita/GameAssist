@@ -26,7 +26,7 @@ public record FlaskInfo(bool Active, int Charges) : IFlaskInfo
         var active = false;
         if (flaskItem.GetComp<Base>(out var @base))
         {
-            if (!JsonDataHelper.FlaskNameToBuffGroups.TryGetValue(@base.ItemBaseName, out var buffNames))
+            if (!AHK.FlaskNameToBuffGroups.TryGetValue(@base.ItemBaseName, out var buffNames))
             {
                 throw new Exception($"New (IsValid={flaskItem.IsValid}) flask base found " +
                     $"{@base.ItemBaseName}. Please let the developer know.");

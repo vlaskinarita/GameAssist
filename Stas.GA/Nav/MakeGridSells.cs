@@ -8,7 +8,7 @@ namespace Stas.GA {
         /// </summary>
         public void MakeGridSells() {
             MakeRouts();
-            if(!ui.sett.b_use_ingame_map)
+            if(!ui.sett.b_use_gh_map)
                 LoadVisited();
             start_gpos = ui.my_last_gpos = ui.me.gpos;
         }

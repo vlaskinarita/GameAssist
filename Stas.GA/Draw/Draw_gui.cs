@@ -66,7 +66,7 @@ partial class DrawMain {
                 var lt = new V2(f.Left, f.Top) / ui.screen_k + ui.w_offs;
                 if (f.Width != 0 || f.Height != 0) {
                     ui_elem_ptr.AddRect(lt, (new V2(f.Right, f.Bottom) / ui.screen_k) + ui.w_offs,
-                        Color.Yellow.ToImgui(), 0,  ImDrawCornerFlags.None  , 0);
+                        Color.Yellow.ToImgui(), 0, 0x0, 0);
                 }
                 DrawZeroElem?.Invoke();
             }

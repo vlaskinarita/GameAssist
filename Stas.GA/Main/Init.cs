@@ -24,6 +24,7 @@ public partial class ui {
     public static int w8 { get; } = 16;////1000 / 60 = 16(60 frame sec)
     public static List<Keys> flask_keys = new();
     public static AHK ahk { get; private set; }
+    public static Inventory flasks => curr_map.server_data.FlaskInventory;
     static ui() {
         Icons = new Dictionary<string, MapIconsIndex>(200);
         foreach (var icon in Enum.GetValues(typeof(MapIconsIndex))) {
@@ -32,14 +33,14 @@ public partial class ui {
        
         int w8_err = 300;
         sett = new Settings().Load<Settings>();
-        sett.b_use_ingame_map = false;
+        sett.b_use_gh_map = false;
         sett.b_develop = true; //<<==change if you're a developer
         flask_keys.AddRange(new List<Keys>(){sett.flask_0_key, sett.flask_1_key,
             sett.flask_2_key, sett.flask_3_key, sett.flask_4_key});
         var need_ea = new List<Element>() {gui.map_devise, gui.KiracMission, gui.open_left_panel, gui.open_right_panel,
                         gui.passives_tree, gui.NpcDialog, gui.LeagueNpcDialog, gui.BetrayalWindow, gui.large_map,
                         gui.AtlasPanel, gui.AtlasSkillPanel,gui.DelveWindow,gui.TempleOfAtzoatl };
-        if (!sett.b_use_ingame_map)
+        if (!sett.b_use_gh_map)
             need_ea.Add(gui.large_map);
         gui.AddToNeedCheck(need_ea);
         udp_sound = new UdpSound();

@@ -10,9 +10,9 @@ namespace Stas.GA;
 public class AHK {
     public AHK() {
         FlaskNameToBuffGroups = FILE.LoadJson<Dictionary<string, 
-            List<string>>> (@"/FlaskNameToBuff.json"); 
+            List<string>>> (@"FlaskNameToBuff.json"); 
         StatusEffectGroups = FILE.LoadJson<Dictionary<string, 
-            List<string>>>(@"/StatusEffectGroup.json");
+            List<string>>>(@"StatusEffectGroup.json");
 
         try {
             AutoQuitCondition = ui.sett.AutoQuitCondition;
@@ -36,7 +36,6 @@ public class AHK {
     ///     Gets or sets the status effects in a group and the group name.
     /// </summary>
     public static Dictionary<string, List<string>> StatusEffectGroups { get; set; } =    new();
-    private readonly Vector4 impTextColor = new(255, 255, 0, 255);
     public readonly List<string> keyPressInfo = new();
     public Vector2 size = new(400, 200);
     public string debugMessage = "None";
@@ -46,7 +45,7 @@ public class AHK {
         ui.sett.EnableAutoQuit &&
         ui.sett.AutoQuitCondition.Evaluate();
 
-    private void DebugLog(string logText) {
+    public void DebugLog(string logText) {
         if (ui.sett.ahk_DebugMode) {
             this.keyPressInfo.Add($"{DateTime.Now.TimeOfDay}: {logText}");
         }

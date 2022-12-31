@@ -62,7 +62,7 @@ namespace Stas.GA {
                     var mgc = Get_gc_by_gp(ui.me.gpos);
                     my_curr_cell = mgc;
 
-                    if (!ui.sett.b_use_ingame_map) {
+                    if (!ui.sett.b_use_gh_map) {
                         CalcVisited();
                     }
                  

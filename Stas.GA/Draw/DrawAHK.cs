@@ -31,7 +31,7 @@ partial class DrawMain {
 
         DynamicCondition.UpdateState();
         if (ui.ahk.ShouldExecuteAutoQuit || Keyboard.IsKeyPressed(ui.sett.AutoQuitKey)) {
-            MiscHelper.KillTCPConnectionForProcess(Core.Process.Pid);
+            MiscHelper.KillTCPConnectionForProcess(ui.game_process.Id);
         }
 
         if (string.IsNullOrEmpty(ui.sett.CurrentProfile)) {

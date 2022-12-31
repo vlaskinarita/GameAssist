@@ -75,7 +75,7 @@ namespace Stas.GA {
         ///     Kills the IPV4 TCP Connection for the process.
         /// </summary>
         /// <param name="processId">process Id whos tcp connection to kill.</param>
-        public static void KillTCPConnectionForProcess(uint processId) {
+        public static void KillTCPConnectionForProcess(int processId) {
             MibTcprowOwnerPid[] table;
             var afInet = 2;
             var buffSize = 0;

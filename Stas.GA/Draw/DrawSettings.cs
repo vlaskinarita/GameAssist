@@ -89,19 +89,27 @@ namespace Stas.GA {
             ImGuiExt.ToolTip("use the keyboard to zoom the map " +
                 "\ninstead of the side mouse buttons (by default)\n" +
                 "Buttons edit in the confg");
-           
-            //ImGui.SameLine();
-            //if (ImGui.Checkbox("IngameMep", ref ui.sett.b_use_ingame_map)) {
-            //    ui.gui.MakeNeedCheckVisList();
-            //    ui.sett.Save();
-            //}
-            //ImGuiExt.ToolTip("Display enemies on the in-game map(old style)");
+
+
 
             ImGui.SameLine();
             if (ImGui.Checkbox("Log first", ref ui.sett.b_draw_log_first)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("show PA/Log tab as default");
+
+            ImGui.SameLine();
+            if (ImGui.Checkbox("GH flask", ref ui.sett.b_use_gh_flask)) {
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("to use the Ggame Helper(C) implementation of flask using, otherwise use my");
+
+            ImGui.SameLine();
+            if (ImGui.Checkbox("GH map", ref ui.sett.b_use_gh_map)) {
+                //ui.gui.MakeNeedCheckVisList();
+                ui.sett.Save();
+            }
+            ImGuiExt.ToolTip("Display enemies on the in-game map: Ggame Helper(C) style");
 
             //================>new line
             if (ui.worker != null) {

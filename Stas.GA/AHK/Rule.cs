@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
+using System.Text.Json.Serialization;
+
 namespace Stas.GA;
 
 /// <summary>
@@ -7,14 +10,15 @@ namespace Stas.GA;
 /// </summary>
 public class Rule
 {
+    string tName => GetType().Name;
     private static bool expand = false;
     private ConditionType newConditionType = ConditionType.AILMENT;
     private readonly Stopwatch cooldownStopwatch = Stopwatch.StartNew();
 
-    [JsonProperty("Conditions", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonInclude]
     private readonly List<ICondition> conditions = new();
 
-    [JsonProperty] private float delayBetweenRuns = 0;
+    [JsonInclude] float delayBetweenRuns = 0;
 
     /// <summary>
     ///     Enable/Disable the rule.
@@ -29,7 +33,7 @@ public class Rule
     /// <summary>
     ///     Rule key to press on success.
     /// </summary>
-    public ConsoleKey Key;
+    public Keys Key;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Rule" /> class.
@@ -51,7 +55,7 @@ public class Rule
         {
             rules[i] = new($"SmallLifeFlask{i + 1}");
             rules[i].Enabled = true;
-            rules[i].Key = ConsoleKey.D1 + i;
+            rules[i].Key = Keys.D1 + i;
             rules[i].conditions.Add(new VitalsCondition(OperatorType.LESS_THAN, VitalType.LIFE_PERCENT, 70));
             rules[i].conditions.Add(new FlaskChargesCondition(OperatorType.BIGGER_THAN, i + 1, 6));
             rules[i].conditions.Add(new FlaskEffectCondition(i + 1));
@@ -59,28 +63,28 @@ public class Rule
 
         rules[2] = new($"SmallLifeFlask3");
         rules[2].Enabled = false;
-        rules[2].Key = ConsoleKey.D3;
+        rules[2].Key = Keys.D3;
         rules[2].conditions.Add(new VitalsCondition(OperatorType.LESS_THAN, VitalType.LIFE_PERCENT, 70));
         rules[2].conditions.Add(new FlaskChargesCondition(OperatorType.BIGGER_THAN, 3, 6));
         rules[2].conditions.Add(new FlaskEffectCondition(3));
 
         rules[3] = new("SmallManaFlask3");
         rules[3].Enabled = false;
-        rules[3].Key = ConsoleKey.D3;
+        rules[3].Key = Keys.D3;
         rules[3].conditions.Add(new VitalsCondition(OperatorType.LESS_THAN, VitalType.MANA_PERCENT, 20));
         rules[3].conditions.Add(new FlaskChargesCondition(OperatorType.BIGGER_THAN, 3, 5));
         rules[3].conditions.Add(new FlaskEffectCondition(3));
 
         rules[4] = new($"QuickSilverFlask4");
         rules[4].Enabled = false;
-        rules[4].Key = ConsoleKey.D4;
+        rules[4].Key = Keys.D4;
         rules[4].conditions.Add(new AnimationCondition(OperatorType.EQUAL_TO, Animation.Run, new Wait(1)));
         rules[4].conditions.Add(new FlaskChargesCondition(OperatorType.BIGGER_THAN, 4, 29));
         rules[4].conditions.Add(new FlaskEffectCondition(4));
 
         rules[5] = new("SmallManaFlask5");
         rules[5].Enabled = true;
-        rules[5].Key = ConsoleKey.D5;
+        rules[5].Key = Keys.D5;
         rules[5].conditions.Add(new VitalsCondition(OperatorType.LESS_THAN, VitalType.MANA_PERCENT, 20));
         rules[5].conditions.Add(new FlaskChargesCondition(OperatorType.BIGGER_THAN, 5, 5));
         rules[5].conditions.Add(new FlaskEffectCondition(5));
@@ -103,10 +107,10 @@ public class Rule
     {
         ImGui.Checkbox("Enable", ref this.Enabled);
         ImGui.InputText("Name", ref this.Name, 20);
-        var tmpKey = (VirtualKeys)this.Key;
+        var tmpKey = this.Key;
         if (ImGuiExt.NonContinuousEnumComboBox("Key", ref tmpKey))
         {
-            this.Key = (ConsoleKey)tmpKey;
+            this.Key = tmpKey;
         }
 
         this.DrawCooldownWidget();
@@ -122,11 +126,8 @@ public class Rule
     {
         if (this.Enabled && this.Evaluate())
         {
-            if (MiscHelper.KeyUp(this.Key))
-            {
-                logger($"Pressed the {this.Key} key");
-                this.cooldownStopwatch.Restart();
-            }
+            Keyboard.KeyUp(this.Key, tName + ".Execute");
+            this.cooldownStopwatch.Restart();
         }
     }
 
