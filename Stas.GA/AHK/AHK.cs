@@ -119,7 +119,6 @@ public class AHK {
     }
 
     internal void AutoQuitWarningUi() {
-
         if (!this.stopShowingAutoQuitWarning && ui.b_town && this.ShouldExecuteAutoQuit) {
             ImGui.OpenPopup("AutoQuitWarningUi");
         }

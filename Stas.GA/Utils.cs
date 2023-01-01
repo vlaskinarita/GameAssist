@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using V2 = System.Numerics.Vector2;
 
 namespace Stas.GA;
@@ -110,17 +110,7 @@ public class MacrosNamedList : iSett {
         macroses = new BindingList<Macros>();
     }
 }
-internal sealed class V2Converter : JsonConverter<V2> {
-    public override V2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        var str = reader.GetString();
-        var fa = str.Split(",");
-        return new V2(float.Parse(fa[0]), float.Parse(fa[1]));
-    }
 
-    public override void Write(Utf8JsonWriter writer, V2 value, JsonSerializerOptions options) {
-        writer.WriteStringValue(value.X + ", " + value.Y);
-    }
-}
 public class MurmurHash2Simple {
     public static UInt32 Hash(Byte[] data) {
         return Hash(data, 0xc58f1a7b);
@@ -180,30 +170,13 @@ public class Color4 {
     public float Z { get; set; }
 }
 public class FILE {
-    internal sealed class V2Converter : JsonConverter<V2> {
-        public override V2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-            var str = reader.GetString();
-            var fa = str.Split(",");
-            return new V2(float.Parse(fa[0]), float.Parse(fa[1]));
-        }
-
-        public override void Write(Utf8JsonWriter writer, V2 value, JsonSerializerOptions options) {
-            writer.WriteStringValue(value.X + ", " + value.Y);
-        }
-    }
-    static JsonReaderOptions comment_opt = new JsonReaderOptions {
-        CommentHandling = JsonCommentHandling.Allow
-    };
-
+   
     public static void SaveAsJson<T>(T t, string fname) {
-        var opt = new JsonSerializerOptions {
-            WriteIndented = true,
-            ReadCommentHandling = JsonCommentHandling.Skip,
-            IgnoreReadOnlyProperties = false,
-            IncludeFields = false
-        };
-        opt.Converters.Add(new V2Converter());
-        var str = JsonSerializer.Serialize<object>(t, opt);
+        var str = JsonConvert.SerializeObject(t,
+                 Formatting.Indented,
+                 new JsonSerializerSettings {
+                     TypeNameHandling = TypeNameHandling.Auto
+                 });
         str.SafelyWriteToFile(fname);
     }
 
@@ -214,14 +187,11 @@ public class FILE {
             return default(T);
         }
         try {
-            var opt = new JsonSerializerOptions {
-                WriteIndented = true,
-                ReadCommentHandling = JsonCommentHandling.Skip,
-                IgnoreReadOnlyProperties = false,
-                IncludeFields = false
-            };
-            opt.Converters.Add(new V2Converter());
-            return JsonSerializer.Deserialize<T>(str, opt);
+            return JsonConvert.DeserializeObject<T>(
+                     str,
+                     new JsonSerializerSettings {
+                         TypeNameHandling = TypeNameHandling.Auto
+                     });
         }
         catch (Exception) {
             if_err?.Invoke();
@@ -229,176 +199,7 @@ public class FILE {
         }
     }
 }
-public class JSON {
-    public class ValueTupleFactory : JsonConverterFactory {
-        public override bool CanConvert(Type typeToConvert) {
-            Type iTuple = typeToConvert.GetInterface("System.Runtime.CompilerServices.ITuple");
-            return iTuple != null;
-        }
 
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
-            Type[] genericArguments = typeToConvert.GetGenericArguments();
-
-            Type converterType = genericArguments.Length switch {
-                1 => typeof(ValueTupleConverter<>).MakeGenericType(genericArguments),
-                2 => typeof(ValueTupleConverter<,>).MakeGenericType(genericArguments),
-                3 => typeof(ValueTupleConverter<,,>).MakeGenericType(genericArguments),
-                // And add other cases as needed
-                _ => throw new NotSupportedException(),
-            };
-            return (JsonConverter)Activator.CreateInstance(converterType);
-        }
-    }
-
-    public class ValueTupleConverter<T1> : JsonConverter<ValueTuple<T1>> {
-        public override ValueTuple<T1> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-            ValueTuple<T1> result = default;
-
-            if (!reader.Read()) {
-                throw new JsonException();
-            }
-
-            while (reader.TokenType != JsonTokenType.EndObject) {
-                if (reader.ValueTextEquals("Item1") && reader.Read()) {
-                    result.Item1 = JsonSerializer.Deserialize<T1>(ref reader, options);
-                }
-                else {
-                    throw new JsonException();
-                }
-                reader.Read();
-            }
-
-            return result;
-        }
-
-        public override void Write(Utf8JsonWriter writer, ValueTuple<T1> value, JsonSerializerOptions options) {
-            writer.WriteStartObject();
-            writer.WritePropertyName("Item1");
-            JsonSerializer.Serialize<T1>(writer, value.Item1, options);
-            writer.WriteEndObject();
-        }
-    }
-
-    public class ValueTupleConverter<T1, T2> : JsonConverter<ValueTuple<T1, T2>> {
-        public override (T1, T2) Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-            (T1, T2) result = default;
-
-            if (!reader.Read()) {
-                throw new JsonException();
-            }
-
-            while (reader.TokenType != JsonTokenType.EndObject) {
-                if (reader.ValueTextEquals("Item1") && reader.Read()) {
-                    result.Item1 = JsonSerializer.Deserialize<T1>(ref reader, options);
-                }
-                else if (reader.ValueTextEquals("Item2") && reader.Read()) {
-                    result.Item2 = JsonSerializer.Deserialize<T2>(ref reader, options);
-                }
-                else {
-                    throw new JsonException();
-                }
-                reader.Read();
-            }
-
-            return result;
-        }
-
-        public override void Write(Utf8JsonWriter writer, (T1, T2) value, JsonSerializerOptions options) {
-            writer.WriteStartObject();
-            writer.WritePropertyName("Item1");
-            JsonSerializer.Serialize<T1>(writer, value.Item1, options);
-            writer.WritePropertyName("Item2");
-            JsonSerializer.Serialize<T2>(writer, value.Item2, options);
-            writer.WriteEndObject();
-        }
-    }
-
-    public class ValueTupleConverter<T1, T2, T3> : JsonConverter<ValueTuple<T1, T2, T3>> {
-        public override (T1, T2, T3) Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-            (T1, T2, T3) result = default;
-
-            if (!reader.Read()) {
-                throw new JsonException();
-            }
-
-            while (reader.TokenType != JsonTokenType.EndObject) {
-                if (reader.ValueTextEquals("Item1") && reader.Read()) {
-                    result.Item1 = JsonSerializer.Deserialize<T1>(ref reader, options);
-                }
-                else if (reader.ValueTextEquals("Item2") && reader.Read()) {
-                    result.Item2 = JsonSerializer.Deserialize<T2>(ref reader, options);
-                }
-                else if (reader.ValueTextEquals("Item3") && reader.Read()) {
-                    result.Item3 = JsonSerializer.Deserialize<T3>(ref reader, options);
-                }
-                else {
-                    ui.AddToLog("ValueTupleConverter err: debug me", MessType.Error);
-                }
-                reader.Read();
-            }
-
-            return result;
-        }
-
-        public override void Write(Utf8JsonWriter writer, (T1, T2, T3) value, JsonSerializerOptions options) {
-            writer.WriteStartObject();
-            writer.WritePropertyName("Item1");
-            JsonSerializer.Serialize<T1>(writer, value.Item1, options);
-            writer.WritePropertyName("Item2");
-            JsonSerializer.Serialize<T2>(writer, value.Item2, options);
-            writer.WritePropertyName("Item3");
-            JsonSerializer.Serialize<T3>(writer, value.Item3, options);
-            writer.WriteEndObject();
-        }
-    }
-
-    public static T FromUTF8Byte<T>(byte[] inp, int start = 0) {
-        var str = Encoding.UTF8.GetString(inp, start, inp.Length - start);
-        return JsonSerializer.Deserialize<T>(str);
-    }
-
-    public static byte[] ToUT8Byte<T>(T t) {
-        var opt = new JsonSerializerOptions {
-            WriteIndented = true,
-            IgnoreReadOnlyProperties = true,
-            IncludeFields = false
-        };
-        // DateTime .ToString("yyyy-MM-dd HH:mm:ss");
-        return JsonSerializer.SerializeToUtf8Bytes<object>(t, opt);
-    }
-    public static T FromZipByte<T>(byte[] zba) {
-        var opt = new JsonSerializerOptions {
-            WriteIndented = true,
-            IgnoreReadOnlyProperties = false,
-            IncludeFields = false
-        };
-        if (zba == null) {
-            ui.AddToLog("JSON.FromZipByte err: ba == null", MessType.Error);
-            return default(T);
-        }
-        else {
-            var ba = ZIP.UnZip(zba);
-            try {
-                return JsonSerializer.Deserialize<T>(ba, opt);
-            }
-            catch (Exception ex) {
-                ui.AddToLog("JSON.FromZipByte err:" + ex.Message, MessType.Error);
-                return default(T);
-            }
-        }
-    }
-    public static byte[] ToZipByte<T>(T t) {
-        try {
-            var ba = ToUT8Byte(t);
-            var zip = ZIP.ToZip(ba);
-            return zip;
-        }
-        catch (Exception ex) {
-            ui.AddToLog("JSON.ToZipByte ERR:" + ex.Message, MessType.Error);
-            return null;
-        }
-    }
-}
 public class ZIP {
     public static string UnZipToString(byte[] ba) {
         if (ba == null)

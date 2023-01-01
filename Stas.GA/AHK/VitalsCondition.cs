@@ -20,9 +20,9 @@ public class VitalsCondition : ICondition {
     /// <param name="operator"><see cref="OperatorType" /> to use in this condition.</param>
     /// <param name="vital">Player vital type to use in this condition.</param>
     /// <param name="threshold">Vital threshold to use in this condition.</param>
-    public VitalsCondition(OperatorType @operator, VitalType vital, int threshold) {
+    public VitalsCondition(OperatorType @operator, VitalType vitalType, int threshold) {
         this.@operator = @operator;
-        this.vitalType = vital;
+        this.vitalType = vitalType;
         this.threshold = threshold;
         this.component = null;
     }

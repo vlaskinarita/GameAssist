@@ -24,11 +24,11 @@ partial class DrawMain {
             ImGui.End();
         }
 
-        ui.ahk.AutoQuitWarningUi();
+        ui.ahk.AutoQuitWarningUi();       
         if (!ui.ahk.ShouldExecutePlugin()) {
             return;
         }
-
+       
         DynamicCondition.UpdateState();
         if (ui.ahk.ShouldExecuteAutoQuit || Keyboard.IsKeyPressed(ui.ahk.sett.AutoQuitKey)) {
             MiscHelper.KillTCPConnectionForProcess(ui.game_process.Id);

@@ -1,11 +1,6 @@
-﻿#region using
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Color = System.Drawing.Color;
-#endregion
+
 namespace Stas.GA { 
     partial class DrawMain {
         void DrawSettings() {

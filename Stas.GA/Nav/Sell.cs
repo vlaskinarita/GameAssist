@@ -1,5 +1,5 @@
-﻿using V2 = System.Numerics.Vector2;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
+using V2 = System.Numerics.Vector2;
 
 namespace Stas.GA {
     public class Cell :IEquatable<Cell> {
@@ -30,7 +30,7 @@ namespace Stas.GA {
         [JsonIgnore]
         public float gdist_to_me => ui.me==null?float.MaxValue: center.GetDistance(ui.me.gpos);
         V2 _min;
-        [JsonConverter(typeof(V2Converter))]
+       
         public V2 min { get { return _min; } 
             set { _min = value; 
                 b = new V2(_min.X, _max.Y);
@@ -38,7 +38,7 @@ namespace Stas.GA {
                 area = (max.X - min.X) * (max.Y - min.Y);
             } }
         V2 _max;
-        [JsonConverter(typeof(V2Converter))]
+       
         public V2 max {
             get { return _max; }
             set {

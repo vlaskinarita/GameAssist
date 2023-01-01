@@ -1,8 +1,6 @@
 ﻿using ImGuiNET;
-using System.Text.Json.Serialization;
-
-namespace Stas.GA; 
-
+namespace Stas.GA;
+using Newtonsoft.Json;
 
 /// <summary>
 ///     For triggering an action on player Status Effect changes.
@@ -11,8 +9,8 @@ public class AilmentCondition : ICondition
 {
     private static readonly AilmentCondition ConfigurationInstance = new("");
 
-    [JsonInclude] private string statusEffectGroupKey;
-    [JsonInclude] private IComponent component;
+    [JsonProperty] private string statusEffectGroupKey;
+    [JsonProperty] private IComponent component;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="AilmentCondition" /> class.

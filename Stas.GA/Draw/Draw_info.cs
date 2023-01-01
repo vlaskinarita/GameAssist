@@ -11,11 +11,10 @@ namespace Stas.GA {
                 ImGui.PushStyleColor(ImGuiCol.WindowBg, Color.FromArgb(255, 1, 1, 1).ToImgui());
                 b_pushed = true;
             }
-          
-            if (ui.b_minimize) { 
+
+            if (ui.b_minimize) {
                 ImGui.SetNextWindowSize(new V2(50, 30));
             }
-          
 
             ImGui.Begin("Master INFO", ImGuiWindowFlags.NoCollapse |
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
@@ -66,7 +65,8 @@ namespace Stas.GA {
             ImGui.Button("cpu=" + ui.cpu.ToRoundStr());
             ImGui.SameLine();
             ImGui.Button("mem=" + ui.mem.ToRoundStr());
-           
+
+          //new libe here
             if (ui.looter != null && ImGui.Button(ui.looter.debug_info)) {
                 ui.looter.LoadSett();
             }

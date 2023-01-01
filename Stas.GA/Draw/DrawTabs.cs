@@ -30,7 +30,8 @@ partial class DrawMain {
                 _draw_log();
             }
             if (ImGui.BeginTabItem("Flasks")) {
-                if (ui.sett.b_use_gh_flask) { 
+                if (ui.sett.b_use_gh_flask) {
+                    DrawAHKSettings();
                     DrawAHK();
                 }
                 else
@@ -69,6 +70,7 @@ partial class DrawMain {
 
             DrawDebugInfo();
 
+            
             ImGui.EndTabBar();
         }
 

@@ -9,17 +9,18 @@ namespace Stas.GA;
 ///     A customizable condition allowing to specify when it is satisfied in user-supplied code
 /// </summary>
 public class DynamicCondition : ICondition {
-    private static readonly Vector4 ConditionSuccess = new(0, 255, 0, 255);
-    private static readonly Vector4 ConditionFailure = new(255, 255, 0, 255);
-    private static readonly Vector4 CodeCompileFailure = new(255, 0, 0, 255);
-    private static readonly DynamicCondition ConfigurationInstance = new("");
+    string tName=>GetType().Name;   
+   static readonly Vector4 ConditionSuccess = new(0, 255, 0, 255);
+   static readonly Vector4 ConditionFailure = new(255, 255, 0, 255);
+   static readonly Vector4 CodeCompileFailure = new(255, 0, 0, 255);
+   static readonly DynamicCondition ConfigurationInstance = new("");
 
-    private static Lazy<DynamicConditionState> state;
+    static Lazy<DynamicConditionState> state;
     [JsonInclude]
-    private string conditionSource;
-    private string lastException;
-    private Func<DynamicConditionState, bool> func;
-    private ulong exceptionCounter = 0;
+    string conditionSource;
+    string lastException;
+    Func<DynamicConditionState, bool> func;
+    ulong exceptionCounter = 0;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="DynamicCondition" /> class.
@@ -76,12 +77,19 @@ public class DynamicCondition : ICondition {
 
     private void RebuildFunction() {
         try {
-            var expression = DynamicExpressionParser.ParseLambda<DynamicConditionState, bool>(
+            ui.SetDebugPossible(() => {
+                if (string.IsNullOrEmpty(conditionSource)) {
+                    ui.AddToLog(tName + ".RebuildFunction conditionSource==null", MessType.Error);
+                    return;
+                }
+                var expression = DynamicExpressionParser.ParseLambda<DynamicConditionState, bool>(
                 new ParsingConfig() { AllowNewToEvaluateAnyType = true, ResolveTypesBySimpleName = true },
                 false,
                 this.conditionSource);
-            this.func = expression.Compile();
-            this.lastException = null;
+                this.func = expression.Compile();
+                this.lastException = null;
+            });
+          
         }
         catch (Exception ex) {
             this.lastException = $"Expression compilation failed: {ex.Message}";

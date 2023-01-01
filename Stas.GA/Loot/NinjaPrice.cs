@@ -1,7 +1,6 @@
-﻿using System.IO;
+﻿using Newtonsoft.Json;
+using System.IO;
 using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 namespace Stas.GA;
 //https://github.com/5k-mirrors/misc-poe-tools/blob/master/doc/poe-ninja-api.md
 //https://poe.ninja/swagger/index.html#/Data/Data_CurrencyOverview
@@ -16,14 +15,7 @@ public class PoeNinja : iSett, IDisposable {
     public bool b_ready = true;
     HttpClient client;
     List<(string, string)> priceQueue { get; set; }
-    JsonSerializerOptions js_opt;
     public PoeNinja() {
-        js_opt = new JsonSerializerOptions {
-            WriteIndented = true,
-            IncludeFields = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-        };
-        js_opt.Converters.Add(new JSON.ValueTupleFactory());
         //TestItem();
         client = new HttpClient();
         //Check(); //here for debug in start league
@@ -36,8 +28,8 @@ public class PoeNinja : iSett, IDisposable {
         curr_price.Clear();
         var done = 0f;
         if (priceQueue == null) {
-            priceQueue = JsonSerializer.Deserialize<List<(string, string)>>(
-                File.ReadAllText(ui.sett.ninja_price), js_opt);
+            priceQueue = JsonConvert.DeserializeObject<List<(string, string)>>(
+                File.ReadAllText(ui.sett.ninja_price));
         }
 
         foreach (var q in priceQueue) {
@@ -77,7 +69,7 @@ public class PoeNinja : iSett, IDisposable {
 
 
         if (task_type == "currency") {
-            var surrencys = JsonSerializer.Deserialize<CurrencyOverviewModel>(resp, js_opt);
+            var surrencys = JsonConvert.DeserializeObject<CurrencyOverviewModel>(resp);
             foreach (var r in surrencys.lines) {
                 var np = new NinjaPrice() { name = r.currencyTypeName, value = r.chaosEquivalent };
                 curr_price.Add(np);
@@ -93,7 +85,7 @@ public class PoeNinja : iSett, IDisposable {
             }
         }
         if (task_type == "item") {
-            var items = JsonSerializer.Deserialize<ItemOverviewModel>(resp, js_opt);
+            var items = JsonConvert.DeserializeObject<ItemOverviewModel>(resp);
             foreach (var r in items.lines) {
                 var np = new NinjaPrice() { name = r.name, value = r.chaosValue };
                 if (task_name == "Watchstone") np.count = r.count;

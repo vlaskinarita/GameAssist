@@ -6,18 +6,18 @@ partial class DrawMain {
     public void DrawAHKSettings() {
 
         var impTextColor = Color.Gray.ToImguiVec4();
-        ImGui.TextColored(impTextColor, "Do not trust Settings.txt files for Auto Hokey Trigger from sources you have not personally verified. " +
-                          "They may contain malicious content that can compromise your computer. " +
-                          "Using profiles with incorrectly configured rules may also lead to you being kicked from the server, " +
-                          "or your account being banned as a result of preforming to many actions repeatedly.");
+        //ImGui.TextColored(impTextColor, "Do not trust Settings.txt files for Auto Hokey Trigger from sources you have not personally verified. " +
+        //                  "They may contain malicious content that can compromise your computer. " +
+        //                  "Using profiles with incorrectly configured rules may also lead to you being kicked from the server, " +
+        //                  "or your account being banned as a result of preforming to many actions repeatedly.");
+        //ImGui.NewLine();
+        //ImGui.TextColored(impTextColor, "Again, all profiles/rules created to use a specified flask(s) should have at a minimum " +
+        //                  "the FLASK_EFFECT and an appropriate number of FLASK_CHARGES defined as part of the use condition of a given profile rule. " +
+        //                  "Failing to to include these two conditions as part of a rule will likely result in Auto Hotkey Trigger spamming the flask(s), " +
+        //                  "resulting in a possible kick or ban from the game servers because of sending to many actions to the server. " +
+        //                  "You have been warrned, use common sense when creating profiles/rulse with this tool.");
         ImGui.NewLine();
-        ImGui.TextColored(impTextColor, "Again, all profiles/rules created to use a specified flask(s) should have at a minimum " +
-                          "the FLASK_EFFECT and an appropriate number of FLASK_CHARGES defined as part of the use condition of a given profile rule. " +
-                          "Failing to to include these two conditions as part of a rule will likely result in Auto Hotkey Trigger spamming the flask(s), " +
-                          "resulting in a possible kick or ban from the game servers because of sending to many actions to the server. " +
-                          "You have been warrned, use common sense when creating profiles/rulse with this tool.");
-        ImGui.NewLine();
-        ImGui.PopTextWrapPos();
+        //ImGui.PopTextWrapPos();
         ImGui.Checkbox("Debug Mode", ref ui.ahk.sett.ahk_DebugMode);
         ImGuiExt.ToolTip("The debug mode may prove to be a helpful tool in troubleshooting Auto HotKey Trigger profile rules that are not preforming as expected. " +
                             "It can also be used to verify if AutoHotKeyTrigger is spamming the profile rule action or not based on the included conditions of a given profile rule. " +
