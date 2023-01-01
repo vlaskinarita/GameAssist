@@ -6,7 +6,7 @@ namespace Stas.GA;
 
 public partial class InputChecker : aMouseChecker {
     void Ahk() {
-        if (Keyboard.b_Try_press_key(ui.sett.DumpStatusEffectOnMe)) {
+        if (Keyboard.b_Try_press_key(ui.ahk.sett.DumpStatusEffectOnMe)) {
             if (ui.me.GetComp<Buffs>(out var buff)) {
                 var data = string.Empty;
                 foreach (var statusEffect in buff.StatusEffects) {

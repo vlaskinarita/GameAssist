@@ -2,78 +2,10 @@
 namespace Stas.GA;
 
 public partial class Settings : iSett {
-
-    #region Flasks setup
-    [JsonInclude]
-    public bool b_use_left_flasks = false;
-    [JsonInclude]
-    public bool b_use_right_flasks = false;
-    [JsonInclude]
-    public bool b_use_life_flask = false;
-    [JsonInclude]
-    public bool b_use_mana_flask = false;
-    [JsonInclude]
-    public bool b_use_silver_flask = false;
-    [JsonInclude]
-    public int trigger_life_left_persent = 50;
-    [JsonInclude]
-    public int cast_price = 20;
-    [JsonInclude]
-    public int silver_gdist = 100;
-    [JsonInclude]
-    public Keys two_left_flask_key = Keys.Q;
-    [JsonInclude]
-    public Keys two_right_flask_key = Keys.W;
-    public Keys life_flask_key { get; set; } = Keys.E;
-    public Keys mana_flask_key { get; set; } = Keys.F6;
-    public Keys silver_flask_key { get; set; } = Keys.F5;
-    [JsonInclude]
-    public Keys flask_0_key = Keys.F5;
-    [JsonInclude]
-    public Keys flask_1_key = Keys.F6;
-    [JsonInclude]
-    public Keys flask_2_key = Keys.E;
-    [JsonInclude]
-    public Keys flask_3_key = Keys.F7;
-    [JsonInclude]
-    public Keys flask_4_key = Keys.F8;
-    #endregion
-
-    #region AHK
     [JsonInclude]
     public bool b_use_gh_map = false;
     [JsonInclude]
     public bool b_use_gh_flask = true;
-    [JsonInclude]
-    public Keys DumpStatusEffectOnMe = Keys.K;
-    [JsonInclude]
-    public bool EnableAutoQuit= false;
-
-    public VitalsCondition AutoQuitCondition { get; set; } = new(OperatorType.LESS_THAN, VitalType.LIFE_PERCENT, 30);
-    [JsonInclude]
-    public Keys AutoQuitKey = Keys.F9;
-
-    /// <summary>
-    ///     Gets all the profiles containing rules on when to perform the action.
-    /// </summary>
-    public readonly Dictionary<string, Profile> Profiles = new();
-
-    /// <summary>
-    ///     Gets the currently selected profile.
-    /// </summary>
-    public string CurrentProfile = string.Empty;
-
-    /// <summary>
-    ///     Gets a value indicating weather the debug mode is enabled or not.
-    /// </summary>
-    public bool ahk_DebugMode = false;
-
-    /// <summary>
-    ///     Gets a value indicating weather this plugin should work in hideout or not.
-    /// </summary>
-    public bool ShouldRunInHideout = true;
-    #endregion
-
     [JsonInclude]
     public Role role = Role.None;
     public string pp_name = "PathOfExile"; //PathOfExile_KG PathOfExileSteam PathOfExile_x64 if we support it

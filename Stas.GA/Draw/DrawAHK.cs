@@ -6,9 +6,9 @@ namespace Stas.GA;
 partial class DrawMain {
 
     public void DrawAHK() {
-        if (ui.sett.ahk_DebugMode) {
+        if (ui.ahk.sett.ahk_DebugMode) {
             ImGui.SetNextWindowSizeConstraints(ui.ahk.size, ui.ahk.size * 2);
-            ImGui.Begin("Debug Mode Window", ref ui.sett.ahk_DebugMode);
+            ImGui.Begin("Debug Mode Window", ref ui.ahk.sett.ahk_DebugMode);
             ImGui.TextWrapped($"Current Issue: {ui.ahk.debugMessage}");
             if (ImGui.Button("Clear History")) {
                 ui.ahk.keyPressInfo.Clear();
@@ -30,21 +30,21 @@ partial class DrawMain {
         }
 
         DynamicCondition.UpdateState();
-        if (ui.ahk.ShouldExecuteAutoQuit || Keyboard.IsKeyPressed(ui.sett.AutoQuitKey)) {
+        if (ui.ahk.ShouldExecuteAutoQuit || Keyboard.IsKeyPressed(ui.ahk.sett.AutoQuitKey)) {
             MiscHelper.KillTCPConnectionForProcess(ui.game_process.Id);
         }
 
-        if (string.IsNullOrEmpty(ui.sett.CurrentProfile)) {
+        if (string.IsNullOrEmpty(ui.ahk.sett.CurrentProfile)) {
             ui.ahk.debugMessage = "No Profile Selected.";
             return;
         }
 
-        if (!ui.sett.Profiles.ContainsKey(ui.sett.CurrentProfile)) {
-            ui.ahk.debugMessage = $"{ui.sett.CurrentProfile} not found.";
+        if (!ui.ahk.sett.Profiles.ContainsKey(ui.ahk.sett.CurrentProfile)) {
+            ui.ahk.debugMessage = $"{ui.ahk.sett.CurrentProfile} not found.";
             return;
         }
 
-        foreach (var rule in ui.sett.Profiles[ui.sett.CurrentProfile].Rules) {
+        foreach (var rule in ui.ahk.sett.Profiles[ui.ahk.sett.CurrentProfile].Rules) {
             rule.Execute(ui.ahk.DebugLog);
         }
     }

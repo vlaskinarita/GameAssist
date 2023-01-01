@@ -30,7 +30,11 @@ partial class DrawMain {
                 _draw_log();
             }
             if (ImGui.BeginTabItem("Flasks")) {
-                DrawFlasks();
+                if (ui.sett.b_use_gh_flask) { 
+                    DrawAHK();
+                }
+                else
+                    DrawFlasks();
                 ImGui.EndTabItem();
             }
             if (ImGui.BeginTabItem("Sett")) {

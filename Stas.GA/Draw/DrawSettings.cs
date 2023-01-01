@@ -100,7 +100,10 @@ namespace Stas.GA {
 
             ImGui.SameLine();
             if (ImGui.Checkbox("GH flask", ref ui.sett.b_use_gh_flask)) {
-                ui.sett.Save();
+                ui.SetDebugPossible(() => {
+                    ui.sett.Save();
+                });
+               
             }
             ImGuiExt.ToolTip("to use the Ggame Helper(C) implementation of flask using, otherwise use my");
 

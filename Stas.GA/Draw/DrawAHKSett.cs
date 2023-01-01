@@ -18,20 +18,20 @@ partial class DrawMain {
                           "You have been warrned, use common sense when creating profiles/rulse with this tool.");
         ImGui.NewLine();
         ImGui.PopTextWrapPos();
-        ImGui.Checkbox("Debug Mode", ref ui.sett.ahk_DebugMode);
+        ImGui.Checkbox("Debug Mode", ref ui.ahk.sett.ahk_DebugMode);
         ImGuiExt.ToolTip("The debug mode may prove to be a helpful tool in troubleshooting Auto HotKey Trigger profile rules that are not preforming as expected. " +
                             "It can also be used to verify if AutoHotKeyTrigger is spamming the profile rule action or not based on the included conditions of a given profile rule. " +
                             "It is highly suggested to create and test all new profiles/rules with the debug mode turned on to insure that all rules are preforming as expected.");
         ImGui.NewLine();
         ImGuiExt.NonContinuousEnumComboBox("Dump Player Status Effects",
-            ref ui.sett.DumpStatusEffectOnMe);
+            ref ui.ahk.sett.DumpStatusEffectOnMe);
         ImGuiExt.ToolTip($"This hotkey will dump the current active player's buff(s), debuff(s) into a text file in the GameHelper -> Plugins -> " +
                             $"AutoHotKeyTrigger folder. Use this hotkey if the AutoHotKeyTrigger plugin fails to detect for example: " +
                             $"bleeds, corrupting blood, poison, freeze, ignites or other de(buffs) currently active on the character.");
 
         ImGui.NewLine();
-        ImGui.Checkbox("Should Run In Hideout", ref ui.sett.ShouldRunInHideout);
-        ImGuiExt.IEnumerableComboBox("Profile", ui.sett.Profiles.Keys, ref ui.sett.CurrentProfile);
+        ImGui.Checkbox("Should Run In Hideout", ref ui.ahk.sett.ShouldRunInHideout);
+        ImGuiExt.IEnumerableComboBox("Profile", ui.ahk.sett.Profiles.Keys, ref ui.ahk.sett.CurrentProfile);
         ImGui.NewLine();
         if (ImGui.Button("Add/Reset and Activate League Start Default Profile")) {
             ui.ahk.CreateDefaultProfile();
@@ -42,7 +42,7 @@ partial class DrawMain {
             ImGui.SameLine();
             if (ImGui.Button("Add")) {
                 if (!string.IsNullOrEmpty(ui.ahk.newProfileName)) {
-                    ui.sett.Profiles.Add(ui.ahk.newProfileName, new Profile());
+                    ui.ahk.sett.Profiles.Add(ui.ahk.newProfileName, new Profile());
                     ui.ahk.newProfileName = string.Empty;
                 }
             }
@@ -51,13 +51,13 @@ partial class DrawMain {
         //separate update to allow settings to draw correctly, does not really hurt performance and only called when the settings window is open
         DynamicCondition.UpdateState();
         if (ImGui.CollapsingHeader("Profiles")) {
-            foreach (var (key, profile) in ui.sett.Profiles) {
+            foreach (var (key, profile) in ui.ahk.sett.Profiles) {
                 if (ImGui.TreeNode($"{key}")) {
                     ImGui.SameLine();
                     if (ImGui.SmallButton("Delete Profile")) {
-                        ui.sett.Profiles.Remove(key);
-                        if (ui.sett.CurrentProfile == key) {
-                            ui.sett.CurrentProfile = string.Empty;
+                        ui.ahk.sett.Profiles.Remove(key);
+                        if (ui.ahk.sett.CurrentProfile == key) {
+                            ui.ahk.sett.CurrentProfile = string.Empty;
                         }
                     }
 
@@ -69,13 +69,13 @@ partial class DrawMain {
 
         if (ImGui.CollapsingHeader("Auto Quit")) {
             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X / 6);
-            ImGui.Checkbox("Enable AutoQuit", ref ui.sett.EnableAutoQuit);
-            ui.sett.AutoQuitCondition.Display(true);
-            ImGui.TextWrapped($"Current AutoQuit Condition Evaluates to {ui.sett.AutoQuitCondition.Evaluate()}");
+            ImGui.Checkbox("Enable AutoQuit", ref ui.ahk.sett.EnableAutoQuit);
+            ui.ahk.sett.AutoQuitCondition.Display(true);
+            ImGui.TextWrapped($"Current AutoQuit Condition Evaluates to {ui.ahk.sett.AutoQuitCondition.Evaluate()}");
             ImGui.Separator();
             ImGui.Text("Hotkey to manually quit game connection: ");
             ImGui.SameLine();
-            ImGuiExt.NonContinuousEnumComboBox("##Manual Quit HotKey", ref ui.sett.AutoQuitKey);
+            ImGuiExt.NonContinuousEnumComboBox("##Manual Quit HotKey", ref ui.ahk.sett.AutoQuitKey);
             ImGui.PopItemWidth();
         }
     }

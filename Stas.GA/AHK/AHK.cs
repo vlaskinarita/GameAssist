@@ -8,14 +8,16 @@ using NAudio.Utils;
 namespace Stas.GA;
 
 public class AHK {
+    public AHKSettings sett;
     public AHK() {
+        sett = new AHKSettings().Load<AHKSettings>();
         FlaskNameToBuffGroups = FILE.LoadJson<Dictionary<string, 
             List<string>>> (@"FlaskNameToBuff.json"); 
         StatusEffectGroups = FILE.LoadJson<Dictionary<string, 
             List<string>>>(@"StatusEffectGroup.json");
 
         try {
-            AutoQuitCondition = ui.sett.AutoQuitCondition;
+            AutoQuitCondition = sett.AutoQuitCondition;
         }
         catch (Exception) {
             ui.AddToLog("AHK AutoQuitCondition load... ", MessType.Error);
@@ -42,11 +44,11 @@ public class AHK {
     public string newProfileName = string.Empty;
 
     public bool ShouldExecuteAutoQuit =>
-        ui.sett.EnableAutoQuit &&
-        ui.sett.AutoQuitCondition.Evaluate();
+        sett.EnableAutoQuit &&
+        sett.AutoQuitCondition.Evaluate();
 
     public void DebugLog(string logText) {
-        if (ui.sett.ahk_DebugMode) {
+        if (sett.ahk_DebugMode) {
             this.keyPressInfo.Add($"{DateTime.Now.TimeOfDay}: {logText}");
         }
     }
@@ -72,7 +74,7 @@ public class AHK {
             return false;
         }
 
-        if (!ui.sett.ShouldRunInHideout && ui.b_home) {
+        if (!sett.ShouldRunInHideout && ui.b_home) {
             this.debugMessage = "Player is in hideout.";
             return false;
         }
@@ -111,8 +113,8 @@ public class AHK {
             profile.Rules.Add(rule);
         }
 
-        ui.sett.Profiles["LeagueStartDefaultProfile"] = profile;
-        ui.sett.CurrentProfile = "LeagueStartDefaultProfile";
+        sett.Profiles["LeagueStartDefaultProfile"] = profile;
+        sett.CurrentProfile = "LeagueStartDefaultProfile";
 
     }
 

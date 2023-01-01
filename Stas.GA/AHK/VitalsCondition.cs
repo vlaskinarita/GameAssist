@@ -1,19 +1,18 @@
 ﻿using ImGuiNET;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Stas.GA;
 
-/// <summary>
-///     For triggering a flask on player vitals changes.
-/// </summary>
 public class VitalsCondition : ICondition {
-    private static readonly OperatorType[] SupportedOperatorTypes = { OperatorType.BIGGER_THAN, OperatorType.LESS_THAN };
-    private static readonly VitalsCondition ConfigurationInstance = new(OperatorType.BIGGER_THAN, VitalType.MANA, 0);
 
-    [JsonInclude] private OperatorType @operator;
-    [JsonInclude] private VitalType vitalType;
-    [JsonInclude] private int threshold;
-    [JsonInclude] private IComponent component;
+    static readonly OperatorType[] SupportedOperatorTypes = { OperatorType.BIGGER_THAN, OperatorType.LESS_THAN };
+    static readonly VitalsCondition ConfigurationInstance = new(OperatorType.BIGGER_THAN, VitalType.MANA, 0);
+
+    [JsonInclude] public OperatorType @operator;
+    [JsonInclude] public VitalType vitalType;
+    [JsonInclude] public int threshold;
+    IComponent component;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="VitalsCondition" /> class.
@@ -109,3 +108,4 @@ public class VitalsCondition : ICondition {
         };
     }
 }
+

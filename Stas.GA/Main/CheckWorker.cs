@@ -1,16 +1,6 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.RegularExpressions;
-
 namespace Stas.GA;
-using System.Text.Json.Serialization;
-
-
-public partial class Settings : iSett {
-   
-    public Settings() {
-    }
-}
 public partial class ui {
     /// <summary>
     /// need after gamestate was changed to select hero screen 

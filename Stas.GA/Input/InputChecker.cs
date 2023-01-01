@@ -22,7 +22,7 @@ public partial class InputChecker : aMouseChecker {
                     ui.b_show_info_over = !ui.b_show_info_over;
                 }
                 Zooming();
-
+                Ahk();
                 var b_game_top = ui.b_game_top || ui.b_imgui_top;
                 if (!b_game_top || !ui.b_ingame || ui.b_busy) { //|| !ui.b_trade_top
                     Thread.Sleep(100);
