@@ -121,6 +121,15 @@ namespace Stas.GA {
             this.LikeChannelling(do_after);
         }
     }
+    public class WaveOfConviction : aSkill { //name=Purge in=divine_tempest
+        public WaveOfConviction(Keys _key, int gdist = 60, int cost = 15, int cast_time = 480, int cooldown = 0)
+            : base(_key, gdist, cost, cast_time, cooldown) {
+            b_can_pull = true;
+        }
+        public override void Run(Action do_after) {
+            this.LikeChannelling(do_after);
+        }
+    }
     public class EtherealKnives : aSkill { //
         public EtherealKnives(Keys _key, int gdist = 75, int cost = 5, int cast_time = 600, int cooldown = 0)
             : base(_key, gdist, cost, cast_time, cooldown) {

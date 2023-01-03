@@ -30,15 +30,12 @@ partial class DrawMain {
         }
        
         DynamicCondition.UpdateState();
-        if (ui.ahk.ShouldExecuteAutoQuit || Keyboard.IsKeyPressed(ui.ahk.sett.AutoQuitKey)) {
-            MiscHelper.KillTCPConnectionForProcess(ui.game_process.Id);
-        }
 
         if (string.IsNullOrEmpty(ui.ahk.sett.CurrentProfile)) {
             ui.ahk.debugMessage = "No Profile Selected.";
             return;
         }
-
+        
         if (!ui.ahk.sett.Profiles.ContainsKey(ui.ahk.sett.CurrentProfile)) {
             ui.ahk.debugMessage = $"{ui.ahk.sett.CurrentProfile} not found.";
             return;

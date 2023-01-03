@@ -170,10 +170,8 @@ public class Color4 {
     public float Z { get; set; }
 }
 public class FILE {
-   
     public static void SaveAsJson<T>(T t, string fname) {
-        var str = JsonConvert.SerializeObject(t,
-                 Formatting.Indented,
+        var str = JsonConvert.SerializeObject(t, Formatting.Indented,
                  new JsonSerializerSettings {
                      TypeNameHandling = TypeNameHandling.Auto
                  });

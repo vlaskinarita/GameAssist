@@ -1,12 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 namespace Stas.GA;
 
 public partial class Settings : iSett {
-    [JsonInclude]
+    [JsonProperty]
     public bool b_use_gh_map = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_use_gh_flask = true;
-    [JsonInclude]
+    [JsonProperty]
     public Role role = Role.None;
     public string pp_name = "PathOfExile"; //PathOfExile_KG PathOfExileSteam PathOfExile_x64 if we support it
     public string poe_w_name = "Path of Exile";
@@ -19,12 +19,12 @@ public partial class Settings : iSett {
     public string log_fname { get; set; } = @"bot.log";
     public string master_IP { get; set; } = "192.168.1.2";
 
-    [JsonInclude]
+    [JsonProperty]
     public bool b_develop = false;
-    [JsonInclude]
+    [JsonProperty]
     public float info_font_size = 1f;
    
-    [JsonInclude]
+    [JsonProperty]
     public bool b_use_Edge_only = false;
 
     public int master_port { get; set; } = 8888;
@@ -34,41 +34,41 @@ public partial class Settings : iSett {
     public Keys zoom_in { get; set; } = Keys.F7;
     public Keys zoom_out { get; set; } = Keys.F8;
  
-    [JsonInclude]
+    [JsonProperty]
     public bool b_use_keybord_for_zoom =false;
-    [JsonInclude]
+    [JsonProperty]
     public int visited_persent = 10;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_gui_debug_on_top = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_map_fps = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_ent_fps = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_log_first = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_log_info = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_log_warn = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_log_error = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_map_interpolate = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_show_unknow = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_show_frendly_mobs = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_me_pos = false;
     public float def_aura_range = 50;
     public string last_leader_name { get; set; }
     public float max_entyty_valid_gdistance = 235; //150
   
-    [JsonInclude]//only one party member can pull and be a tank
+    [JsonProperty]//only one party member can pull and be a tank
     public bool b_can_pull_alone;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_open_door;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_auto_loot = false;
     public bool b_get_wp { get; set; } = false;
    
@@ -77,7 +77,7 @@ public partial class Settings : iSett {
     public float danger_gdist = 60f;
     public float buff_gdist = 50f;
     public float loot_gdist = 80f;
-    [JsonInclude]
+    [JsonProperty]
     public MasterNams master_name = MasterNams.GF1030;
    
     /// <summary>
@@ -85,47 +85,47 @@ public partial class Settings : iSett {
     /// </summary>
     public int last_pp_index { get; set; } = 0;
    
-    [JsonInclude]
+    [JsonProperty]
     public bool b_show_iTask = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_can_play_sound = false;
-    [JsonInclude]
+    [JsonProperty]
     public float center_fix_dist = -18f;
-    [JsonInclude]
+    [JsonProperty]
     public float center_fix_k = 1f;
-    [JsonInclude]
+    [JsonProperty]
     public float icon_size = 10;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_mouse_moving = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_show_info_over = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_misk = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_proj = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_useles = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_draw_bad_centr = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_get_next_pack;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_get_not_visited;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_auto_top;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_alt_reset = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_auto_close_modals = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_debug = false;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_get_chest;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_hit_barrels;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_auto_buff = true;
-    [JsonInclude]
+    [JsonProperty]
     public bool b_auto_rise = false;
        
     public float map_angle = 50f;             

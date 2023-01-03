@@ -42,11 +42,9 @@ public class glacial_cascade_totem : aTotem {
 /// generic damage totem
 /// </summary>
 public class DamageTotem : aTotem {
-    public DamageTotem(Keys _key, int gdist = 70, int cost = 8, 
-        int cast_time = 450, int max_count=3)
+    public DamageTotem(Keys _key, string int_name, int gdist = 70, int cost = 8, int cast_time = 450, int max_count = 3)
          : base(_key, gdist, cost, cast_time, max_count) {
-        SetSkill("generic_totem");
-        ui.AddToLog(tName + "same  err: debug me", MessType.Error);
+        SetSkill(int_name);
     }
     //here no name for serching totems
     public override int curr_count => base.curr_count;

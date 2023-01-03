@@ -5,6 +5,7 @@ using V2 = System.Numerics.Vector2;
 namespace Stas.GA {
     partial class DrawMain {
         string input = "";
+        ImDrawListPtr info_ptr;
         void DrawInfo() {
             bool b_pushed = false;
             if (ui.b_contr_alt) {
@@ -18,6 +19,7 @@ namespace Stas.GA {
 
             ImGui.Begin("Master INFO", ImGuiWindowFlags.NoCollapse |
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.AlwaysAutoResize);
+            info_ptr = ImGui.GetWindowDrawList();
             if (ImGui.Button("_")) {
                 ui.b_minimize = !ui.b_minimize;
             }
@@ -66,7 +68,7 @@ namespace Stas.GA {
             ImGui.SameLine();
             ImGui.Button("mem=" + ui.mem.ToRoundStr());
 
-          //new libe here
+          //new line here
             if (ui.looter != null && ImGui.Button(ui.looter.debug_info)) {
                 ui.looter.LoadSett();
             }
@@ -77,10 +79,18 @@ namespace Stas.GA {
             }
 
             if (ui.curr_map != null) {
-                ImGui.SameLine(0);
+                ImGui.SameLine();
                 ImGui.Button(ui.curr_map.debug_info);
             }
-           // DrawTaskerState();
+
+            ImGui.SameLine();
+            if (ImGui.Button("Donate")) {
+                Process.Start(new ProcessStartInfo() {
+                    FileName = "https://www.paypal.com/paypalme/Ghelper",
+                    UseShellExecute = true
+                });
+            }
+            // DrawTaskerState();
             //ImGui.SameLine();
             //if (ImGui.Button("Quit")) {
             //    ui.sett.Save();
@@ -89,7 +99,7 @@ namespace Stas.GA {
             //        HardTerminalExit();
             //        Environment.Exit(0);
             //    });
-             
+
             //}
             //ImGuiExt.ToolTip("Close application");
 

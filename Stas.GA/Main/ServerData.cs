@@ -5,19 +5,39 @@ namespace Stas.GA;
 /// </summary>
 public class ServerData : RemoteObjectBase {
     public IList<ushort> skill_bar_ids { get; private set; } = new List<ushort>();
-    DateTime next_upd = DateTime.Now;
-    internal override void Tick(IntPtr ptr, string from=null) {
+    IntPtr last_ptr = default;
+    DateTime next_tick = DateTime.Now;
+    internal override void Tick(IntPtr ptr, string from) {
+        Address = ptr;
         if (Address == IntPtr.Zero)
             return;
-        if (next_upd > DateTime.Now) { 
+        if (last_ptr != Address) { // only happens when area is changed.
             ClearCurrentlySelectedInventory();
-            var data = ui.m.Read<ServerDataStructure>(Address + ServerDataStructure.SKIP);
-            GetPlayerInventoryItems(data);
-            GetNerestPlayers(data);
-            next_upd = DateTime.Now.AddMicroseconds(300);
+            last_ptr = Address;
         }
+        if (next_tick < DateTime.Now)
+            return;
+        var data = ui.m.Read<ServerDataStructure>(Address + ServerDataStructure.SKIP);
+        var inventoryData = ui.m.ReadStdVector<InventoryArrayStruct>(data.PlayerInventories);
+        this.PlayerInventories.Clear();
+        IntPtr flask_ptr = default;
+        for (var i = 0; i < inventoryData.Length; i++) {
+            var invName = (InventoryName)inventoryData[i].InventoryId;
+            var invAddr = inventoryData[i].InventoryPtr0;
+            this.PlayerInventories[invName] = invAddr;
+            switch (invName) {
+                case InventoryName.Flask1:
+                    flask_ptr = invAddr;
+                    break;
+            }
+        }
+        next_tick = DateTime.Now.AddMilliseconds(150);
+        FlaskInventory.Tick(flask_ptr, "ServerData.Tick()");
+
+        //GetPlayerInventoryItems(data);
+        //GetNerestPlayers(data);
     }
-  
+
     public List<Player> nearest_players { get; private set; } = new();
     List<Player> tmp_players = new List<Player>();
     void GetNerestPlayers(ServerDataStructure data) {
@@ -61,12 +81,10 @@ public class ServerData : RemoteObjectBase {
     /// <summary>
     ///     Gets the inventories associated with the player.
     /// </summary>
-    internal Dictionary<InventoryName, IntPtr> PlayerInventories { get; } = new();
-
+    Dictionary<InventoryName, IntPtr> PlayerInventories { get; } = new();
 
     void GetPlayerInventoryItems(ServerDataStructure data) {
         var inventoryData = ui.m.ReadStdVector<InventoryArrayStruct>(data.PlayerInventories);
-
         PlayerInventories.Clear();
         for (var i = 0; i < inventoryData.Length; i++) {
             var invName = (InventoryName)inventoryData[i].InventoryId;
@@ -74,7 +92,7 @@ public class ServerData : RemoteObjectBase {
             PlayerInventories[invName] = invAddr;
             switch (invName) {
                 case InventoryName.Flask1:
-                    FlaskInventory.Tick(invAddr);
+                    FlaskInventory.Tick(invAddr, tName+ ".GetPlayerInventoryItems");
                     break;
             }
         }
@@ -102,15 +120,14 @@ public class ServerData : RemoteObjectBase {
 
     private void ClearCurrentlySelectedInventory() {
         selectedInvName = InventoryName.NoInvSelected;
-        SelectedInv.Tick(IntPtr.Zero);
+        SelectedInv.Tick(IntPtr.Zero, tName+ ".ClearCurrentlySelectedInventory");
     }
     /// <inheritdoc />
     protected override void Clear() {
         ClearCurrentlySelectedInventory();
         PlayerInventories.Clear();
-        FlaskInventory.Tick(IntPtr.Zero);
+        FlaskInventory.Tick(IntPtr.Zero, tName+ ".Clear");
     }
-    /// <inheritdoc />
     internal override void ToImGui() {
         if ((int)selectedInvName > PlayerInventories.Count) {
             ClearCurrentlySelectedInventory();
@@ -127,7 +144,7 @@ public class ServerData : RemoteObjectBase {
             "###Inventory Selector",
             PlayerInventories.Keys,
             ref selectedInvName)) {
-            SelectedInv.Tick(PlayerInventories[selectedInvName]);
+            SelectedInv.Tick(PlayerInventories[selectedInvName], tName+ ".ToImGui");
         }
 
         ImGui.SameLine();

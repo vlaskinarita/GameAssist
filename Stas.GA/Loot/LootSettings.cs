@@ -1,55 +1,57 @@
-﻿using System.Text.Json.Serialization;
+﻿
+using Newtonsoft.Json;
+
 namespace Stas.GA {
     public class LootSettings : iSett {
-        [JsonInclude]
+        [JsonProperty]
         public bool b_quest = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_league = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_portal = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_wisdom = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_transmut = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_augment = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_alter = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_arm_scrap = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_whetstone = true;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_maps = true; 
-        [JsonInclude]
+        [JsonProperty]
         public bool b_currency;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Claw;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Dagger;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Wand;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Body_Armour;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Boots;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Gloves;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Helmet;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Amulet;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Belt;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_Ring;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_small_bow;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_6s_big;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_6s_small;
-        [JsonInclude]
+        [JsonProperty]
         public bool b_6l_any;
     }
     //"Claw", "Dagger", "Wand", "Body Armour", "Boots", "Gloves", "Helmet", "Amulet", "Belt", "Ring"

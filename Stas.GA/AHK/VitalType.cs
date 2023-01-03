@@ -1,7 +1,11 @@
-﻿namespace Stas.GA; 
+﻿using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+
+namespace Stas.GA;
 /// <summary>
 ///     Different type of player Vitals.
 /// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
 public enum VitalType
 {
     /// <summary>

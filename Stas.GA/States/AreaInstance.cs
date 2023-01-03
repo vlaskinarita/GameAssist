@@ -28,7 +28,6 @@ public partial class AreaInstance : RemoteObjectBase {
         }
      
         var data = ui.m.Read<AreaInstanceOffsets>(Address);
-        //FindeTerraine();
         //AwakeEntities.Clear();
         //EntityCaches.ForEach((e) => e.Clear());
         //need_check.Clear();
@@ -46,21 +45,9 @@ public partial class AreaInstance : RemoteObjectBase {
             }
         }
         UpdateEnvironmentAndCaches(data.Environments);
-        server_data.Tick(data.ServerDataPtr);
+        server_data.Tick(data.ServerDataPtr, tName+ ".Tick");
         UpdateEntities(data.AwakeEntities);
     }
-    void FindeTerraine() {
-        for (int i = 0; i < 8000; i += 8) {
-            var terr = ui.m.Read<TerrainStruct>(Address + i);
-
-            if (terr.TotalTiles.X > 10 && terr.TotalTiles.X < 200 //31
-                && terr.TotalTiles.Y > 10 && terr.TotalTiles.Y < 200) { //19
-                var terr_adress = i.ToString("X");
-                var terr_che = (Address + i).ToString("X");
-            }
-        }
-    }
-
     protected override void Clear() {
 
     }
@@ -70,8 +57,6 @@ public partial class AreaInstance : RemoteObjectBase {
     bool filterByPath = false;
     StdVector environmentPtr = default;
     readonly List<int> environments;
-
-
 
     /// <summary>
     ///     Gets the Monster Level of current Area.
@@ -106,8 +91,7 @@ public partial class AreaInstance : RemoteObjectBase {
     ///     Gets important environments entity caches. This only contain awake entities.
     /// </summary>
     public List<DisappearingEntity> EntityCaches { get; }
-
-
+  
     /// <summary>
     ///     Gets the terrain metadata data of the current Area/Zone instance.
     /// </summary>

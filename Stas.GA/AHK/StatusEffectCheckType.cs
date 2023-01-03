@@ -1,9 +1,13 @@
-﻿namespace Stas.GA;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Stas.GA;
 
 
 /// <summary>
 ///     Check type for the condition
 /// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
 public enum StatusEffectCheckType
 {
     /// <summary>

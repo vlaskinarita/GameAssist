@@ -1,25 +1,25 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 namespace Stas.GA;
 
 public partial class AHKSettings : iSett {
-    [JsonInclude]
+    [JsonProperty]
     public Keys DumpStatusEffectOnMe = Keys.K;
-    [JsonInclude]
+    [JsonProperty]
     public bool EnableAutoQuit = false;
-    [JsonInclude]
+    [JsonProperty]
     public VitalsCondition AutoQuitCondition { get; set; } = new(OperatorType.LESS_THAN, VitalType.LIFE_PERCENT, 30);
-    [JsonInclude]
+    [JsonProperty]
     public Keys AutoQuitKey = Keys.F9;
 
-    [JsonInclude]
+    [JsonProperty]
     public readonly Dictionary<string, Profile> Profiles =   new();
 
-    [JsonInclude]
+    [JsonProperty]
     public string CurrentProfile = string.Empty;
 
-    [JsonInclude]
+    [JsonProperty]
     public bool ahk_DebugMode = false;
 
-    [JsonInclude]
+    [JsonProperty]
     public bool ShouldRunInHideout = true;
 }

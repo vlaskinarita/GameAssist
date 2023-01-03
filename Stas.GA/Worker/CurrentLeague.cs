@@ -1,5 +1,21 @@
 ﻿namespace Stas.GA;
-
+public class Curse_botik : aWorker { //Frost Blades
+    public Curse_botik() {
+        //b_use_low_life = true;
+        main = new EtherealKnives(Keys.D1, 80, 40, 480);
+        //main = new WaveOfConviction(Keys.D1, 80, 15, 480);
+        jump = new JumpSkill(Keys.D2, 45, 15, 150, 2260);
+        totem = new DamageTotem(Keys.D3, "Purge", 15, 49, 450, 1);
+        //d4 = new Wrath(Keys.D4);
+        //d5 = new Purity_of_elements(Keys.D5);
+        d6 = new Clarity(Keys.D6);
+        d7 = new Herald_of_Thunder(Keys.D7);
+        d8 = new Herald_of_Ice(Keys.D8);
+        d9 = new Herald_of_Ash(Keys.D9);
+        //d0 = new Precision(Keys.D0);
+        CountSkills();
+    }
+}
 public class Default : aWorker {
     public Default() {
         //b_use_low_life = true;

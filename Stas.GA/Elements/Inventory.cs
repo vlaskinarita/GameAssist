@@ -22,6 +22,56 @@ public class Inventory : Element {
     internal Inventory(IntPtr address, string name) : base(address, name) {
 
     }
+    internal override void Tick(IntPtr ptr, string from) {
+        base.Tick(ptr, from);
+        if (Address == IntPtr.Zero)
+            return;
+        var invInfo = ui.m.Read<InventoryStruct>(Address);
+        TotalBoxes = invInfo.TotalBoxes;
+        ServerRequestCounter = invInfo.ServerRequestCounter;
+        itemsToInventorySlotMapping = ui.m.ReadStdVector<IntPtr>(invInfo.ItemList);
+        Items.Clear();
+
+#if DEBUG
+        var list = itemsToInventorySlotMapping.Distinct();
+        foreach (var invItemPtr in list)
+            run(invItemPtr);
+#else
+        Parallel.ForEach(list, invItemPtr => {
+            run(invItemPtr);
+        });
+#endif
+
+
+        void run(IntPtr invItemPtr) {
+            if (invItemPtr != IntPtr.Zero) {
+                var invItem = ui.m.Read<InventoryItemStruct>(invItemPtr);
+                if (Items.ContainsKey(invItemPtr)) {
+                    Items[invItemPtr].Tick(invItem.Item);
+                }
+                else {
+                    var item = new Item(invItem.Item);
+                    if (!string.IsNullOrEmpty(item.Path)) {
+                        if (!Items.TryAdd(invItemPtr, item)) {
+                            ui.AddToLog(tName + "Failed to add item into the Inventory Item Dict.", MessType.Error);
+                        }
+                    }
+                }
+            }
+        }
+        foreach (var item in Items) {
+            if (!item.Value.IsValid) {
+                Items.TryRemove(item.Key, out _);
+            }
+        }
+    }
+    protected override void Clear() {
+        TotalBoxes = default;
+        ServerRequestCounter = default;
+        itemsToInventorySlotMapping = null;
+        Items.Clear();
+    }
+
     public IList<NormalInventoryItem> VisibleInventoryItems { get; private set; }
     /// <summary>
     ///     Gets a value indicating total number of boxes in the inventory.
@@ -36,8 +86,7 @@ public class Inventory : Element {
     /// <summary>
     ///     Gets all the items in the inventory.
     /// </summary>
-    public ConcurrentDictionary<IntPtr, Item> Items { get; } =
-        new();
+    public ConcurrentDictionary<IntPtr, Item> Items { get; } =  new();
 
     /// <summary>
     ///     Gets the item at the specific slot in the inventory.
@@ -107,45 +156,7 @@ public class Inventory : Element {
         }
     }
 
-    /// <inheritdoc />
-    protected override void Clear() {
-        TotalBoxes = default;
-        ServerRequestCounter = default;
-        itemsToInventorySlotMapping = null;
-        Items.Clear();
-    }
-
-    internal override void Tick(IntPtr ptr, string from=null) {
-        if (Address == IntPtr.Zero)
-            return;
-        var invInfo = ui.m.Read<InventoryStruct>(Address);
-        TotalBoxes = invInfo.TotalBoxes;
-        ServerRequestCounter = invInfo.ServerRequestCounter;
-        itemsToInventorySlotMapping = ui.m.ReadStdVector<IntPtr>(invInfo.ItemList);
-        Items.Clear();
-
-        Parallel.ForEach(itemsToInventorySlotMapping.Distinct(), invItemPtr => {
-            if (invItemPtr != IntPtr.Zero) {
-                var invItem = ui.m.Read<InventoryItemStruct>(invItemPtr);
-                if (Items.ContainsKey(invItemPtr)) {
-                    Items[invItemPtr].Tick(invItem.Item);
-                }
-                else {
-                    var item = new Item(invItem.Item);
-                    if (!string.IsNullOrEmpty(item.Path)) {
-                        if (!Items.TryAdd(invItemPtr, item)) {
-                            ui.AddToLog(tName+ "Failed to add item into the Inventory Item Dict.", MessType.Error);
-                        }
-                    }
-                }
-            }
-        });
-
-        foreach (var item in Items) {
-            if (!item.Value.IsValid) {
-                Items.TryRemove(item.Key, out _);
-            }
-        }
-    }
+   
+   
 
 }

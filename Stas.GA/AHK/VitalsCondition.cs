@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
+using Newtonsoft.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+
 
 namespace Stas.GA;
 
@@ -9,9 +10,9 @@ public class VitalsCondition : ICondition {
     static readonly OperatorType[] SupportedOperatorTypes = { OperatorType.BIGGER_THAN, OperatorType.LESS_THAN };
     static readonly VitalsCondition ConfigurationInstance = new(OperatorType.BIGGER_THAN, VitalType.MANA, 0);
 
-    [JsonInclude] public OperatorType @operator;
-    [JsonInclude] public VitalType vitalType;
-    [JsonInclude] public int threshold;
+    [JsonProperty] public OperatorType @operator;
+    [JsonProperty] public VitalType vitalType;
+    [JsonProperty] public int threshold;
     IComponent component;
 
     /// <summary>
@@ -72,13 +73,16 @@ public class VitalsCondition : ICondition {
     }
 
     private void ToImGui(bool expand = true) {
-        ImGui.Text("Player");
+        ImGui.Text("Me");
         ImGui.SameLine();
         if (expand) {
+            ImGui.SetNextItemWidth(100);
             ImGuiExt.EnumComboBox("is##VitalSelector", ref this.vitalType);
             ImGui.SameLine();
+            ImGui.SetNextItemWidth(100);
             ImGuiExt.EnumComboBox("##VitalOperator", ref this.@operator, SupportedOperatorTypes);
             ImGui.SameLine();
+            ImGui.SetNextItemWidth(40);
             ImGui.InputInt("##VitalThreshold", ref this.threshold);
         }
         else {

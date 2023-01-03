@@ -29,7 +29,10 @@ partial class DrawMain {
                 _draw_alert();
                 _draw_log();
             }
-            if (ImGui.BeginTabItem("Flasks")) {
+            var f_title = "Flasks";
+            if (ui.sett.b_use_gh_flask)
+                f_title = "AHK";
+            if (ImGui.BeginTabItem(f_title)) {
                 if (ui.sett.b_use_gh_flask) {
                     DrawAHKSettings();
                     DrawAHK();
@@ -38,6 +41,8 @@ partial class DrawMain {
                     DrawFlasks();
                 ImGui.EndTabItem();
             }
+            ImGuiExt.ToolTip("Show/hide "+ f_title + " panel");
+
             if (ImGui.BeginTabItem("Sett")) {
                 DrawSettings();
                 ImGui.EndTabItem();
@@ -69,10 +74,8 @@ partial class DrawMain {
             ImGuiExt.ToolTip("Show/hide debug setting");
 
             DrawDebugInfo();
-
             
             ImGui.EndTabBar();
         }
-
     }
 }

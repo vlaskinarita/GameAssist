@@ -6,6 +6,9 @@ namespace Stas.GA;
 
 public partial class InputChecker : aMouseChecker {
     void Ahk() {
+        if (ui.ahk.ShouldExecuteAutoQuit || Keyboard.b_Try_press_key(ui.ahk.sett.AutoQuitKey)) {
+            MiscHelper.KillTCPConnectionForProcess(ui.game_process.Id);
+        }
         if (Keyboard.b_Try_press_key(ui.ahk.sett.DumpStatusEffectOnMe)) {
             if (ui.me.GetComp<Buffs>(out var buff)) {
                 var data = string.Empty;

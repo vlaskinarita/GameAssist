@@ -1,22 +1,21 @@
-﻿
-using System;
-using System.Linq.Dynamic.Core;
+﻿using System.Linq.Dynamic.Core;
 using System.Numerics;
-using System.Text.Json.Serialization;
 using ImGuiNET;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 namespace Stas.GA;
 /// <summary>
 ///     A customizable condition allowing to specify when it is satisfied in user-supplied code
 /// </summary>
 public class DynamicCondition : ICondition {
-    string tName=>GetType().Name;   
+   string tName=>GetType().Name;   
    static readonly Vector4 ConditionSuccess = new(0, 255, 0, 255);
    static readonly Vector4 ConditionFailure = new(255, 255, 0, 255);
    static readonly Vector4 CodeCompileFailure = new(255, 0, 0, 255);
    static readonly DynamicCondition ConfigurationInstance = new("");
 
     static Lazy<DynamicConditionState> state;
-    [JsonInclude]
+    [JsonProperty]
     string conditionSource;
     string lastException;
     Func<DynamicConditionState, bool> func;
@@ -77,19 +76,16 @@ public class DynamicCondition : ICondition {
 
     private void RebuildFunction() {
         try {
-            ui.SetDebugPossible(() => {
-                if (string.IsNullOrEmpty(conditionSource)) {
-                    ui.AddToLog(tName + ".RebuildFunction conditionSource==null", MessType.Error);
-                    return;
-                }
-                var expression = DynamicExpressionParser.ParseLambda<DynamicConditionState, bool>(
-                new ParsingConfig() { AllowNewToEvaluateAnyType = true, ResolveTypesBySimpleName = true },
-                false,
-                this.conditionSource);
-                this.func = expression.Compile();
-                this.lastException = null;
-            });
-          
+            if (string.IsNullOrEmpty(conditionSource)) {
+                ui.AddToLog(tName + ".RebuildFunction conditionSource==null", MessType.Error);
+                return;
+            }
+            var expression = DynamicExpressionParser.ParseLambda<DynamicConditionState, bool>(
+            new ParsingConfig() { AllowNewToEvaluateAnyType = true, ResolveTypesBySimpleName = true },
+            false,
+            this.conditionSource);
+            this.func = expression.Compile();
+            this.lastException = null;
         }
         catch (Exception ex) {
             this.lastException = $"Expression compilation failed: {ex.Message}";

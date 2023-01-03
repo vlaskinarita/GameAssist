@@ -1,21 +1,20 @@
 ﻿using ImGuiNET;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace Stas.GA; 
+namespace Stas.GA;
 
 
 /// <summary>
 ///     For triggering an action on number of flask charges the flask got.
 /// </summary>
-public class FlaskChargesCondition : ICondition
-{
+public class FlaskChargesCondition : ICondition {
     private static readonly OperatorType[] SupportedOperatorTypes = { OperatorType.BIGGER_THAN, OperatorType.LESS_THAN };
     private static readonly FlaskChargesCondition ConfigurationInstance = new(OperatorType.BIGGER_THAN, 1, 10);
 
-    [JsonInclude] private OperatorType @operator;
-    [JsonInclude] private int flaskSlot;
-    [JsonInclude] private int charges;
-    [JsonInclude] private IComponent component;
+    [JsonProperty] private OperatorType @operator;
+    [JsonProperty] private int flaskSlot;
+    [JsonProperty] private int charges;
+    [JsonProperty] private IComponent component;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="FlaskChargesCondition" /> class.
@@ -23,8 +22,7 @@ public class FlaskChargesCondition : ICondition
     /// <param name="operator"><see cref="OperatorType" /> to use in this condition.</param>
     /// <param name="flaskSlot">Flask slot number who's charges to look for.</param>
     /// <param name="charges">Flask charges threshold to use.</param>
-    public FlaskChargesCondition(OperatorType @operator, int flaskSlot, int charges)
-    {
+    public FlaskChargesCondition(OperatorType @operator, int flaskSlot, int charges) {
         this.@operator = @operator;
         this.flaskSlot = flaskSlot;
         this.charges = charges;
@@ -37,12 +35,10 @@ public class FlaskChargesCondition : ICondition
     /// <returns>
     ///     <see cref="ICondition" /> if user wants to add the condition, otherwise null.
     /// </returns>
-    public static FlaskChargesCondition Add()
-    {
+    public static FlaskChargesCondition Add() {
         ConfigurationInstance.ToImGui();
         ImGui.SameLine();
-        if (ImGui.Button("Add##FlaskCharges"))
-        {
+        if (ImGui.Button("Add##FlaskCharges")) {
             return new FlaskChargesCondition(
                 ConfigurationInstance.@operator,
                 ConfigurationInstance.flaskSlot,
@@ -53,27 +49,22 @@ public class FlaskChargesCondition : ICondition
     }
 
     /// <inheritdoc />
-    public void Display(bool expand)
-    {
+    public void Display(bool expand) {
         this.ToImGui(expand);
         this.component?.Display(expand);
     }
 
     /// <inheritdoc/>
-    public void Add(IComponent component)
-    {
+    public void Add(IComponent component) {
         this.component = component;
     }
 
     /// <inheritdoc />
-    public bool Evaluate()
-    {
+    public bool Evaluate() {
         var isConditionValid = false;
         var flask = ui.flasks[0, this.flaskSlot - 1];
-        if (flask.Address != IntPtr.Zero && flask.GetComp<Charges>(out var chargesComponent))
-        {
-            isConditionValid = this.@operator switch
-            {
+        if (flask.Address != IntPtr.Zero && flask.GetComp<Charges>(out var chargesComponent)) {
+            isConditionValid = this.@operator switch {
                 OperatorType.BIGGER_THAN => chargesComponent.Current > this.charges,
                 OperatorType.LESS_THAN => chargesComponent.Current < this.charges,
                 _ => throw new Exception($"FlaskChargesCondition doesn't support {this.@operator}.")
@@ -83,28 +74,23 @@ public class FlaskChargesCondition : ICondition
         return this.component == null ? isConditionValid : this.component.execute(isConditionValid);
     }
 
-    private void ToImGui(bool expand = true)
-    {
+    private void ToImGui(bool expand = true) {
         ImGui.Text("Flask");
         ImGui.SameLine();
-        if (expand)
-        {
+        if (expand) {
             ImGui.DragInt("has##FlaskChargesFlaskSlot", ref this.flaskSlot, 0.05f, 1, 5);
             ImGui.SameLine();
             ImGuiExt.EnumComboBox("##FlaskChargesOperator", ref this.@operator, SupportedOperatorTypes);
             ImGui.SameLine();
             ImGui.DragInt("charges##FlaskChargesFlaskCharge", ref this.charges, 0.1f, 2, 80);
         }
-        else
-        {
+        else {
             ImGui.TextColored(new System.Numerics.Vector4(255, 255, 0, 255), $"{this.flaskSlot}");
             ImGui.SameLine();
-            if (this.@operator == OperatorType.BIGGER_THAN)
-            {
+            if (this.@operator == OperatorType.BIGGER_THAN) {
                 ImGui.Text("has more than");
             }
-            else
-            {
+            else {
                 ImGui.Text("has less than");
             }
 

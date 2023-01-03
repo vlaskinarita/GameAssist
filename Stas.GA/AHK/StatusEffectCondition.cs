@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Stas.GA; 
 
@@ -19,11 +19,11 @@ public class StatusEffectCondition : ICondition
     private static readonly StatusEffectCondition ConfigurationInstance
         = new(OperatorType.BIGGER_THAN, "", 1, StatusEffectCheckType.CHARGES);
 
-    [JsonInclude] string buffId;
-    [JsonInclude] StatusEffectCheckType checkType;
-    [JsonInclude] OperatorType @operator;
-    [JsonInclude] float threshold;
-    [JsonInclude] IComponent component;
+    [JsonProperty] string buffId;
+    [JsonProperty] StatusEffectCheckType checkType;
+    [JsonProperty] OperatorType @operator;
+    [JsonProperty] float threshold;
+    [JsonProperty] IComponent component;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="StatusEffectCondition" /> class.

@@ -112,7 +112,7 @@ public partial class AreaInstance {
         environments.Clear();
         MonsterLevel = 0;
         AreaHash = 0;
-        server_data.Tick(IntPtr.Zero);
+        server_data.Tick(IntPtr.Zero, tName+ ".ClearOldData");
         //player.Tick(IntPtr.Zero, tName+ ".ClearOldData");
         terr_meta_data = default;
         height_data = Array.Empty<float[]>();

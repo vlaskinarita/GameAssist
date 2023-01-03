@@ -30,7 +30,7 @@ public partial class AreaInstance {
         if (string.IsNullOrEmpty(info)) {
             info = pa_info(e);
         }
-        if (e.id == 3221227159) {//debug_id
+        if (e.id == debug_id) {//debug_id
                                  //  System.Diagnostics.Debugger.Break();
         }
         var mi = new MapItem(e, info);

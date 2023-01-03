@@ -1,14 +1,15 @@
 ﻿using ImGuiNET;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Numerics;
-using System.Text.Json.Serialization;
+
 namespace Stas.GA;
 /// <summary>
 ///     Adds wait to the condition.
 /// </summary>
 public class Wait : IComponent
 {
-    [JsonInclude]
+    [JsonProperty]
     private float duration;
     private Stopwatch sw;
 

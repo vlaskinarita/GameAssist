@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
-
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 namespace Stas.GA;
 
 /// <summary>
 ///     Conditions supported by this plugin.
 /// </summary>
+[JsonConverter(typeof(StringEnumConverter))]
 public enum ConditionType {
     /// <summary>
     ///     Condition based on player Vitals.
@@ -34,10 +35,10 @@ public enum ConditionType {
     /// <summary>
     ///     Condition based on Ailment on the player.
     /// </summary>
-    AILMENT,
+    AILMENT
 
-    /// <summary>
-    ///     Condition base on user code
-    /// </summary>
-    DYNAMIC
+    ///// <summary>
+    /////     Condition base on user code
+    ///// </summary>
+    //DYNAMIC
 }

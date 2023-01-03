@@ -1,15 +1,16 @@
-﻿using System.Drawing;
+﻿using Newtonsoft.Json;
+using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
-using System.Text.Json.Serialization;
+
 using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
 
 namespace Stas.GA;
 public class SafeScreen : iSett {
 
-    [JsonInclude]
+    [JsonProperty]
     public int Width { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public int Height { get; protected private set; }
 
     public Dictionary<string, Cell> Blocks = new();
@@ -17,39 +18,39 @@ public class SafeScreen : iSett {
     public Dictionary<string, Cell> Centr = new();
     List<(string, V2, V2)> CentrPoints = new();
     List<(string, V2, V2)> RoutPounts = new();
-    [JsonInclude]
+    [JsonProperty]
     public Cell league { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell flare_tnt { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell ritual { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell debuff { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell top { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell left { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell bott { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell right { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell buffs { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell party { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell chat { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell chat_help { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell menu { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell flask { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell xp_bar { get; protected private set; }
-    [JsonInclude]
+    [JsonProperty]
     public Cell ppa { get; protected private set; } //passive point available
-    [JsonInclude]
+    [JsonProperty]
     public Cell skills { get; protected private set; } //3E0
     protected V2 my_sp;
     Thread worker, center_updater;

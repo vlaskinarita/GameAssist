@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Stas.GA; 
 
@@ -13,9 +13,9 @@ public class AnimationCondition : ICondition
     private static readonly OperatorType[] SupportedOperatorTypes = { OperatorType.EQUAL_TO, OperatorType.NOT_EQUAL_TO };
     private static readonly AnimationCondition ConfigurationInstance = new(OperatorType.EQUAL_TO, Animation.Idle, null);
 
-    [JsonInclude] private OperatorType @operator;
-    [JsonInclude] private Animation animation;
-    [JsonInclude] private IComponent component;
+    [JsonProperty] private OperatorType @operator;
+    [JsonProperty] private Animation animation;
+    [JsonProperty] private IComponent component;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="AnimationCondition" /> class.

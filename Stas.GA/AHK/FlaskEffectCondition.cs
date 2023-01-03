@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Stas.GA; 
 /// <summary>
@@ -10,8 +10,8 @@ public class FlaskEffectCondition : ICondition
 {
     private static readonly FlaskEffectCondition ConfigurationInstance = new(1);
 
-    [JsonInclude] private int flaskSlot;
-    [JsonInclude] private IComponent component;
+    [JsonProperty] private int flaskSlot;
+    [JsonProperty] private IComponent component;
     private IntPtr flaskAddressCache = IntPtr.Zero;
     private List<string> flaskBuffsCache = new();
 

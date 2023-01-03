@@ -11,10 +11,8 @@ public class AHK {
     public AHKSettings sett;
     public AHK() {
         sett = new AHKSettings().Load<AHKSettings>();
-        FlaskNameToBuffGroups = FILE.LoadJson<Dictionary<string, 
-            List<string>>> (@"FlaskNameToBuff.json"); 
-        StatusEffectGroups = FILE.LoadJson<Dictionary<string, 
-            List<string>>>(@"StatusEffectGroup.json");
+        FlaskNameToBuffGroups = FILE.LoadJson<Dictionary<string, List<string>>> (@"FlaskNameToBuff.json"); 
+        StatusEffectGroups = FILE.LoadJson<Dictionary<string, List<string>>>(@"StatusEffectGroup.json");
 
         try {
             AutoQuitCondition = sett.AutoQuitCondition;
@@ -112,10 +110,9 @@ public class AHK {
         foreach (var rule in Rule.CreateDefaultRules()) {
             profile.Rules.Add(rule);
         }
-
-        sett.Profiles["LeagueStartDefaultProfile"] = profile;
-        sett.CurrentProfile = "LeagueStartDefaultProfile";
-
+        sett.Profiles["StartDefaultProfile"] = profile;
+        sett.CurrentProfile = "StartDefaultProfile";
+        sett.Save();
     }
 
     internal void AutoQuitWarningUi() {

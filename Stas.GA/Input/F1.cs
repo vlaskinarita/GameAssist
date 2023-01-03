@@ -19,6 +19,7 @@ public partial class InputChecker {
                
             }
             else {
+                var flask = ui.flasks[0, 0];
                 //var cam = ui.m.Read<CameraOffsets>( ui.camera.Address);
                 //ui.test.FindUiElemNotUnick("Nessa");
                 //ui.test_elem =FindSameUIElement("Decorations", 1)[0].Item1; //660

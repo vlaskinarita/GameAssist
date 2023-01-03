@@ -1,10 +1,13 @@
-﻿using System.Diagnostics;
+﻿using Newtonsoft.Json;
+using System.Diagnostics;
 using V2 = System.Numerics.Vector2;
 using V3 = System.Numerics.Vector3;
-namespace Stas.GA; 
+namespace Stas.GA;
 
+[JsonObject(MemberSerialization.OptIn)]
 public abstract class aSkill {
     public string tName => GetType().Name;
+    [JsonIgnore]
     public aTask parent_task { get; set; }
     public bool b_can_pull { get; protected private set; } = false;
     public bool b_can_hit { get;  protected private set; } = true; //for distroy a barall etc
@@ -20,7 +23,7 @@ public abstract class aSkill {
     public Entity me => ui.me;
     protected Random R = new Random();
     public int using_time { get; protected private set; }
-    public Keys key;
+    public Keys key { get; protected private set; }
     public int id { get; }
     public int cooldown { get; protected private set; }
     public int mana_cost { get; protected private set; } = 5;
