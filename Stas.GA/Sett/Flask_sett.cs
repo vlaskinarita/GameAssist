@@ -17,7 +17,7 @@ public partial class Settings : iSett {
     [JsonProperty]
     public int trigger_life_left_persent = 50;
     [JsonProperty]
-    public int cast_price = 20;
+    public int mana_cast_price = 20;
     [JsonProperty]
     public int silver_gdist = 100;
     [JsonProperty]

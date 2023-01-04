@@ -16,6 +16,7 @@ public partial class AreaInstance  {
         //entities = entities.OrderBy(s => s.Key.id).ToList();
         //sw_cash.Print("ReadStdMapAsList");
         var data = AwakeEntities;
+        TryRemoveOldEntyty();
         TryRemoveExplodedEnt();
         TryGetEntToDebug();
         if (mi_debug != null)
@@ -114,6 +115,21 @@ public partial class AreaInstance  {
                 kv.Value.IsValid = false;
             }
               
+        }
+        void TryRemoveOldEntyty() {
+            if (ui.b_contrl)
+                return;
+            foreach (var kv in data) {
+                var e = kv.Value;
+                var so_faar = e.gdist_to_me > ui.sett.max_entyty_valid_gdistance;
+                var is_dead = e.eType == eTypes.Monster && e.IsDead;
+                if (!e.IsValid || so_faar || is_dead) { //dont delete misk etc for prevent remake it
+                    var done = AwakeEntities.TryRemove(kv.Key, out _);
+                    if (!done) {
+                        ui.AddToLog("cant delete ent from cash", MessType.Error);
+                    }
+                }
+            }
         }
     }
     void GetParty() {

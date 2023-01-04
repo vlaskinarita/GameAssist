@@ -70,6 +70,7 @@ public partial class ui {
                     foreach (var n in need_upd_per_frame)
                         n?.Tick(n.Address, "frame thread");
                     CheckWorker();
+                    tasker.Tick();
                     if (worker == null) {
                         ui.AddToLog("Frame err: worker need be setup", MessType.Warning);
                         Thread.Sleep(w8);

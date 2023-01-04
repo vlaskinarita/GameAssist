@@ -14,31 +14,31 @@ namespace Stas.GA {
             ImGui.SetColumnWidth(4, 76);
 
             ImGui.SetNextItemWidth(40);
-            if (ImGuiExt.NonContinuousEnumComboBox(">1", ref ui.sett.flask_0_key)) {
+            if (ImGuiExt.NonContinuousEnumComboBox("<=1", ref ui.sett.flask_0_key)) {
                 ui.sett.Save();
             }
 
             ImGui.NextColumn();
             ImGui.SetNextItemWidth(40);
-            if (ImGuiExt.NonContinuousEnumComboBox(">2", ref ui.sett.flask_1_key)){
+            if (ImGuiExt.NonContinuousEnumComboBox("<=2", ref ui.sett.flask_1_key)){
                 ui.sett.Save();
             }
 
             ImGui.NextColumn(); 
             ImGui.SetNextItemWidth(40);
-            if (ImGuiExt.NonContinuousEnumComboBox(">3", ref ui.sett.flask_2_key)){
+            if (ImGuiExt.NonContinuousEnumComboBox("<=3", ref ui.sett.flask_2_key)){
                 ui.sett.Save();
             }
 
             ImGui.NextColumn();
             ImGui.SetNextItemWidth(40);
-            if (ImGuiExt.NonContinuousEnumComboBox(">4", ref ui.sett.flask_3_key)){
+            if (ImGuiExt.NonContinuousEnumComboBox("<=4", ref ui.sett.flask_3_key)){
                 ui.sett.Save();
             }
 
             ImGui.NextColumn();
             ImGui.SetNextItemWidth(40);
-            if(ImGuiExt.NonContinuousEnumComboBox(">5", ref ui.sett.flask_4_key)) {
+            if(ImGuiExt.NonContinuousEnumComboBox("<=5", ref ui.sett.flask_4_key)) {
                 ui.sett.Save();
             }
 
@@ -110,7 +110,7 @@ namespace Stas.GA {
             }
             ImGui.SetNextItemWidth(60);
             ImGui.SameLine();
-            if (ImGui.SliderInt("<=Cast price   ", ref ui.sett.cast_price, 5, 70)) {
+            if (ImGui.SliderInt("<=Cast price   ", ref ui.sett.mana_cast_price, 5, 140)) {
                 ui.sett.Save();
             }
             ImGuiExt.ToolTip("Set the remaining amount of mana " +

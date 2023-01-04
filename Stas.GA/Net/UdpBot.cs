@@ -165,7 +165,7 @@ public class UdpBot : IDisposable {//version=1
                                         if (ui.worker.b_use_low_life)
                                             ui.tasker.UseManaFlask();
                                         else
-                                            ui.tasker.UseLifeFlask(true);
+                                            ui.tasker.UseLifeFlask();
                                     }
                                     else
                                         Keyboard.KeyPress(key);

@@ -188,7 +188,7 @@ public partial class ui {
         var baseAddress = game_process.MainModule.BaseAddress;
 
         sw.Restart();
-        const int patt_need= 7;
+        const int patt_need = 9;
         int w8_count = 0;
         while (base_offsets.Count!= patt_need && w8_count <5) {
             Patt_wrapp pw = default;

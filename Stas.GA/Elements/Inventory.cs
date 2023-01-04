@@ -31,9 +31,8 @@ public class Inventory : Element {
         ServerRequestCounter = invInfo.ServerRequestCounter;
         itemsToInventorySlotMapping = ui.m.ReadStdVector<IntPtr>(invInfo.ItemList);
         Items.Clear();
-
-#if DEBUG
         var list = itemsToInventorySlotMapping.Distinct();
+#if DEBUG
         foreach (var invItemPtr in list)
             run(invItemPtr);
 #else
@@ -41,7 +40,6 @@ public class Inventory : Element {
             run(invItemPtr);
         });
 #endif
-
 
         void run(IntPtr invItemPtr) {
             if (invItemPtr != IntPtr.Zero) {

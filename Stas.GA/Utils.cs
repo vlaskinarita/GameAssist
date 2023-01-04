@@ -14,8 +14,9 @@ using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
 public enum PattNams : byte {
-    PlayerInventory, GameStates, FileRoot, AreaChangeCounter,
-    GameWindowScaleValues, TerrainRotatorHelper, TerrainRotationSelector
+    PlayerInventory, GameController, GameStates, FileRoot,
+    AreaChangeCounter, GameWindowScaleValues, TerrainRotatorHelper,
+    TerrainRotationSelector, GameCullSize
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

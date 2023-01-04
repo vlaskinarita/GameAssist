@@ -1,9 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using V2 = System.Numerics.Vector2;
 namespace Stas.GA;
 
 public abstract partial class aTasker {
+    string tName =>GetType().Name;  
     #region bool flags
     /// <summary>
     ///dont do quest/looting/etc if no danger, but fight and protect the Leader
@@ -20,33 +22,16 @@ public abstract partial class aTasker {
     protected abstract void MakeRoleTask();
     Stopwatch sw = new Stopwatch();
     List<double> elapsed = new();
-    public aTasker() {
-        tasker_thread = new Thread(() => {
-            while (ui.b_running) {
-                while (ui.worker == null) {//it's possible right after the program start
-                    if (ui.curr_role != Role.None)
-                        ui.AddToLog("Tasker: worker==null", MessType.Critical);
-                    Thread.Sleep(200);
-                }
-                need_stop_cast ??= new List<aSkill>() { ui.worker.main, ui.worker.totem };
-                #region tick timer & w8ting for relax CPU
-                var d_elaps = sw.Elapsed.TotalMilliseconds;
-                elapsed.Add(d_elaps);
-                if (elapsed.Count > 60)
-                    elapsed.RemoveAt(0);
-                var frame_time = elapsed.Sum() / elapsed.Count;
-                if (frame_time < ui.w8) {
-                    Thread.Sleep(ui.w8 - (int)frame_time);
-                }
-                else {
-                    Thread.Sleep(1);
-                    ui.AddToLog("Tasker: Big Tick Time", MessType.Error);
-                }
-                #endregion
-            }
-        });
-        tasker_thread.IsBackground= true;
-        tasker_thread.Start();
+    public void Tick() {
+        if (!ui.sett.b_use_gh_flask && ui.life != null) {
+            var ulf = UseLifeFlask();
+            ui.AddToLog(tName + ".UseLifeFlask " + ulf);
+            var umf = UseManaFlask();
+            ui.AddToLog(tName + ".UseManaFlask " + umf);
+        }
+        while (ui.worker == null) {//it's possible right after the program start
+            return;
+        }
     }
     public void Add_iTask(iTask it) {
         i_tasks.Add(it);
@@ -110,29 +95,28 @@ public abstract partial class aTasker {
         var tmp_list = i_tasks.Where(t => t.id != _id);
         i_tasks = new ConcurrentBag<iTask>(tmp_list);
     }
+    //todo: need flask duration get from memory
     DateTime last_mfu; //last mana flask used
     public bool UseManaFlask() {
-        if (last_mfu.AddSeconds(3) < DateTime.Now) {
-            if (ui.worker.b_use_low_life)
-                Keyboard.KeyPress(Keys.E, "Use mana flask");
-            else
-                Keyboard.KeyPress(Keys.F6, "Use mana flask");
+        var low_mana = ui.life.Mana.Current < ui.sett.mana_cast_price;
+        var can_use = ui.sett.b_use_mana_flask && last_mfu.AddSeconds(3) < DateTime.Now;
+        if (can_use && low_mana) {
+            Keyboard.KeyPress(ui.sett.mana_flask_key, "Use mana flask");
             last_mfu = DateTime.Now;
             return true;
         }
         return false;
     }
     DateTime last_lfu;//last life flask used
-    public void UseLifeFlask(bool dont_check = false) {
-        if (ui.worker == null || ui.worker.b_use_low_life || ui.life == null)
-            return;
-        var low_life = ui.life.Health.CurrentInPercent < 40;
-        bool can_use = last_lfu.AddMilliseconds(ui.worker.life_flask_ms) < DateTime.Now;
-        if (dont_check || (low_life && can_use)) {
-            Keyboard.KeyPress(Keys.E, "CheckLife");
+    public bool UseLifeFlask() {
+        var low_life = ui.life.Health.CurrentInPercent < ui.sett.trigger_life_left_persent;
+        bool can_use = ui.sett.b_use_life_flask && last_lfu.AddMilliseconds(3) < DateTime.Now;
+        if (low_life && can_use) {
+            Keyboard.KeyPress(ui.sett.life_flask_key, "UseLifeFlask");
             last_lfu = DateTime.Now;
-            ui.warning = "Use Life potion was OK";
+            ui.AddToLog(tName + ".UseLifeFlask ok");
+            return true;
         }
+        return false;
     }
-  
 }
