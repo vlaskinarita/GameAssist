@@ -16,8 +16,7 @@ public partial class Entity : RemoteObjectBase {
             case eTypes.Shrine:
                 return;
         }
-        if (id == 2) { 
-        }
+      
         if (!GetComp<Render>(out var _)) {
             this.eType = eTypes.Useless;
         }

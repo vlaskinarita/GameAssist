@@ -12,8 +12,11 @@ using System.Text;
 using V2 = System.Numerics.Vector2;
 
 namespace Stas.GA;
-
 public enum PattNams : byte {
+    PlayerInventory, GameStates, FileRoot, AreaChangeCounter,
+    GameWindowScaleValues, TerrainRotatorHelper, TerrainRotationSelector
+}
+public enum PattNams_7_3 : byte {
     PlayerInventory, GameController, GameStates, FileRoot,
     AreaChangeCounter, GameWindowScaleValues, TerrainRotatorHelper,
     TerrainRotationSelector, GameCullSize

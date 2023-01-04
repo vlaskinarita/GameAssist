@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Forms;
 using ImGuiNET;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using V2 = System.Numerics.Vector2;
@@ -29,24 +30,25 @@ public partial class Entity : RemoteObjectBase {
         if (Address == IntPtr.Zero)
             return;
         var data = ui.m.Read<EntityOffsets>(this.Address);
-        var c_ptr = data.ItemBase.ComponentListPtr;
+        var cl_ptr = data.ItemBase.ComponentListPtr; //component list_ptr
         IsValid = EntityHelper.IsValidEntity(data.IsValid);
         if (!IsValid) {
             // Invalid entity data is normally corrupted. let's not parse it.
             return;
         }
         id = data.Id;
+    
         if (eType == eTypes.Useless) {
             // let's not read or parse any useless entity components.
             return;
         }
 
-        if (c_ptr.TotalElements(1) <= 0 && c_ptr.TotalElements(1) >100 ) {
+        if (cl_ptr.TotalElements(1) <= 0 && cl_ptr.TotalElements(1) >100 ) {
             ui.AddToLog(tName + ".Tick err comp_ptr", MessType.Error);
             return;
         }
         var need_parce = false;
-        var cch = c_ptr.GetHashCode();
+        var cch = cl_ptr.GetHashCode();
         if (cch != last_comp_hash) {
             UpdateComponentData(data.ItemBase);
             last_comp_hash = cch;
@@ -58,6 +60,8 @@ public partial class Entity : RemoteObjectBase {
         }
         foreach (var kv in componentCache) {
             kv.Value.Tick(kv.Value.Address);
+        }
+        if (id == 1331) {
         }
     }
     IntPtr last_ptr = default;
@@ -88,9 +92,6 @@ public partial class Entity : RemoteObjectBase {
                     this.componentAddresses.TryAdd(name, entityComponent[nameAndIndex.Index]);
                 }
             }
-        }
-        foreach (var kv in componentCache) {
-            kv.Value.Tick(kv.Value.Address, "ent=>tick");
         }
     }
     bool isnearby;
@@ -285,7 +286,7 @@ public partial class Entity : RemoteObjectBase {
     public bool IsDead => !IsAlive;
     public bool IsAlive {
         get {
-            if (GetComp<Life>(out var life) ) {
+            if (this.GetComp<Life>(out var life) ) {
                 return life.Health.Current > 0; 
             }
             return false;

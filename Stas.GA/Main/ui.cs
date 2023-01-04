@@ -253,7 +253,6 @@ public partial class ui {
     internal static TerrainHeightHelper RotatorHelper { get; } = new(IntPtr.Zero, 24);
 
    
-    static Stopwatch sw = new Stopwatch();
     static List<double> elapsed = new();
 
     /// <summary>

@@ -25,6 +25,8 @@ public partial class ui {
     public static List<Keys> flask_keys = new();
     public static AHK ahk { get; private set; }
     public static Inventory flasks => curr_map.server_data.FlaskInventory;
+    static Stopwatch sw_main = new Stopwatch();
+
     static ui() {
         Icons = new Dictionary<string, MapIconsIndex>(200);
         foreach (var icon in Enum.GetValues(typeof(MapIconsIndex))) {
@@ -63,6 +65,7 @@ public partial class ui {
                     Thread.Sleep(200);
                     continue;
                 }
+                sw_main.Restart();
                 if(states.b_ready)
                     states.Tick(states.Address, "frame thread");
 
@@ -70,18 +73,19 @@ public partial class ui {
                     foreach (var n in need_upd_per_frame)
                         n?.Tick(n.Address, "frame thread");
                     CheckWorker();
+                    //todo: temporary dont need a worker
                     tasker.Tick();
                     if (worker == null) {
                         ui.AddToLog("Frame err: worker need be setup", MessType.Warning);
                         Thread.Sleep(w8);
                         continue;
                     }
-                    CheckFlasks(false);
-                    CheckMapPlayers();
+                    //CheckFlasks(false); //not right offset jet
+                    //CheckMapPlayers();//not right offset jet
                 }
 
                 #region tick timer & w8ting for relax CPU
-                var d_elaps = sw.Elapsed.TotalMilliseconds;
+                var d_elaps = sw_main.Elapsed.TotalMilliseconds;
                 elapsed.Add(d_elaps);
                 if (elapsed.Count > 60)
                     elapsed.RemoveAt(0);
