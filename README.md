@@ -10,6 +10,9 @@ to get access just:
 
 ☑️Write me a private message with your boosty nickname/e-mail and your github name
 
-The price includes unlimited (within reasonable limits) help in using/understanding the code of this complex kernel, which will allow you to write cool add-ons. 
+The price includes unlimited (within reasonable limits) help in using/understanding the code of this complex Core,
+which will allow you to write cool add-ons/plugins. 
 
-You will be able to get donations for them using our distribution network. https://t.me/Wlastas_GameAssist
+You will be able to get donations for them using our distribution network.
+
+https://t.me/Wlastas_GameAssist
