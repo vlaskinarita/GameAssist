@@ -1,4 +1,4 @@
-# GameAssist
+# GameAssist for game version: 3.21.2
 
 ☑️you get access to a private repository
 
