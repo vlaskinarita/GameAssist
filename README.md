@@ -4,7 +4,7 @@
 
 to get access just:
 
-☑️join to my discord: Discord link available under the base (5$) tariff plan.. spamers protection -I'm sry
+☑️join to my discord: Discord link available under the boosty base (5$) tariff plan.. spamers protection -I'm sry
 
 ☑️sign up for my boosty with a Core (25$) plan: https://boosty.to/gameassist
 
