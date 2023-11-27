@@ -4,13 +4,14 @@
 
 to get access just:
 
-☑️join to my discord: Discord link available under the boosty base (5$) tariff plan.. spamers protection -I'm sry
-
 ☑️sign up for my boosty with a Core (25$) plan: https://boosty.to/gameassist
 
-☑️PM me with your boosty nickname/e-mail and your github name for https://t.me/game_assist
+☑️join to my discord: the link to discord will be received on the boosty site after you sign up - sorry - protection from spammers.
 
-The price includes unlimited (within reasonable limits) help in using/understanding the code of this complex Core,
-which will allow you to write cool add-ons/plugins. 
+☑️PM me your github name.
 
-You will be able to get donations for them using our distribution network.
+☑️The price includes unlimited (within reasonable limits) help in using/understanding the code of this complex Core,
+which will allow you to write cool add-ons/plugins and you will be able to get donations for them using our distribution network.
+
+☑️I find it a bit difficult to communicate in text mode, so maybe you can use your telegram account, where we can chat and talk about the necessary points by voice. In that case, whisper to me  https://t.me/Wlastas_GameAssist
+
